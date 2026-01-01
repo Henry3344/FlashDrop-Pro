@@ -43,9 +43,14 @@
         .logo { font-size: 30px; font-weight: 900; color: white; letter-spacing: 2px; }
         .logo span { color: var(--primary); }
         
-        .status-dot { width: 14px; height: 14px; border-radius: 50%; background: #666; transition: 0.3s; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        /* [修改] 状态指示灯区域样式 */
+        .status-container { display: flex; flex-direction: column; align-items: center; margin-right: 12px; }
+        .status-dot { width: 14px; height: 14px; border-radius: 50%; background: #666; transition: 0.3s; box-shadow: 0 0 10px rgba(0,0,0,0.5); margin-bottom: 2px; }
         .status-dot.online { background: var(--success); box-shadow: 0 0 15px var(--success); }
         .status-dot.offline { background: var(--danger); box-shadow: 0 0 15px var(--danger); }
+        .status-text { font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; transition: 0.3s; }
+        .status-text.online { color: var(--success); }
+        .status-text.offline { color: var(--danger); }
 
         .trust-badges { display: flex; gap: 8px; margin-top: 10px; font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); flex-wrap: nowrap; justify-content: center; width: 100%; overflow: hidden; }
         .trust-badges span { background: rgba(99, 102, 241, 0.2); padding: 4px 8px; border-radius: 6px; border: 1.5px solid var(--border); color: #c7d2fe; white-space: nowrap; flex-shrink: 0; }
@@ -295,7 +300,15 @@
 <div class="app-container" id="app">
     <div class="stars-container" id="stars"></div>
     <nav class="navbar">
-        <div class="logo-wrap"><div id="status-dot" class="status-dot online"></div><div class="logo">⚡ Flash<span>Drop</span> Pro</div><div id="currentLangTag" style="font-size:11px; color:var(--primary); font-weight:900; margin-left:12px; border:1.5px solid var(--primary); padding:2px 6px; border-radius:6px;">EN</div></div>
+        <div class="logo-wrap">
+            <div class="status-container">
+                <div id="status-dot" class="status-dot online"></div>
+                <div id="status-text" class="status-text online">Online</div>
+            </div>
+            
+            <div class="logo">⚡ Flash<span>Drop</span> Pro</div>
+            <div id="currentLangTag" style="font-size:11px; color:var(--primary); font-weight:900; margin-left:12px; border:1.5px solid var(--primary); padding:2px 6px; border-radius:6px;">EN</div>
+        </div>
         <div class="trust-badges" id="trust-badges" style="display: flex; justify-content: center; align-items: center; gap: 5px; margin-top: 8px; width: 100%; flex-wrap: nowrap;"></div>
     </nav>
 
@@ -609,10 +622,13 @@
         el.innerText = res;
     }
 
-    /* --- [多语言配置中心：含隐私警告 & 括号说明] --- */
+    /* --- [多语言配置中心：含Online/Offline状态] --- */
     const I18N = {
         en: { 
             tag: "EN", 
+            /* [新增] 状态文字 */
+            on: "Online", off: "Offline",
+            
             tabSend: "Send", tabReceive: "Receive", 
             badges: ["🔒 P2P Encrypted", "🕵️ No Logs", "⚡ High Speed", "📂 Auto-Wipe"], 
             drop: "DROP TO STAGE", fileLab: "Drop / Click", 
@@ -635,9 +651,9 @@
             hashHintSend: "Visual Check: If receiver's emojis match these, the key is correct!",
             hashHintRecv: "Visual Check: If the key matches, the emojis will match!",
             
-            /* [新增] AI & 隐私相关 */
+            /* AI & 隐私相关 */
             aiNote: "(Selected types)",
-            privWarn: "⚠️ Privacy Alert: Filenames indicate sensitive info (ID/Passport/Address etc.). Highly recommend enabling AES-256 encryption!",
+            privWarn: "⚠️ Privacy Alert: Filenames indicate sensitive info (ID/Passport/Address). Highly recommend enabling AES-256 encryption!",
             
             step1: "Select Files<br><span style='font-size:9px; opacity:0.7'>(Type Text)</span>", 
             step2: "Set AES-256<br><span style='font-size:9px; opacity:0.7'>(Option)</span>", 
@@ -664,10 +680,14 @@
             faqQ7: "Can staff access my files?", faqA7: "Impossible. We have no keys and no storage.",
             faqQ8: "Is password mandatory?", faqA8: "Optional, but recommended for sensitive data on local networks.",
             faqQ9: "Can you reset lost password?", faqA9: "No. We don't store passwords.",
+            
             techPhrases: ["Generating RSA-4096 Key...", "Initializing WebRTC Handshake...", "Establishing P2P Tunnel...", "Synchronizing Peer Signals...", "Channel Secured!"]
         },
         zh: { 
             tag: "CN",
+            /* [新增] 状态文字 */
+            on: "在线", off: "离线",
+
             tabSend: "发送", tabReceive: "接收", 
             badges: ["🔒 P2P 加密", "🕵️ 零日志", "⚡ 极速传输", "📂 阅后即焚"], 
             drop: "松手上传", fileLab: "拖拽 / 点击", 
@@ -690,7 +710,7 @@
             hashHintSend: "AES-256密钥设置好后，只要接收方的emoji与下方的emoji相符即为密钥正确！",
             hashHintRecv: "只要输入的AES-256密钥一致，emoji就会一致！",
 
-            /* [新增] AI & 隐私相关 */
+            /* AI & 隐私相关 */
             aiNote: "(以下是你已选中的文件类型)",
             privWarn: "⚠️ 隐私提醒：文件名包含敏感信息（身份证/护照/房产证等）。强烈建议开启 AES-256 加密！",
 
@@ -719,10 +739,14 @@
             faqQ7: "员工能看文件吗？", faqA7: "不能。我们没密钥也没存储。",
             faqQ8: "必须设密码吗？", faqA8: "可选。但建议局域网内使用时设置。",
             faqQ9: "能重置密码吗？", faqA9: "不能。忘了就真没了。",
+
             techPhrases: ["正在生成 RSA-4096 密钥...", "初始化 WebRTC 握手...", "建立 P2P 加密隧道...", "同步对等信号...", "安全通道已建立!"]
         },
         ja: { 
             tag: "JP",
+            /* [新增] 状态文字 */
+            on: "オンライン", off: "オフライン",
+
             tabSend: "送信", tabReceive: "受信", 
             badges: ["🔒 P2P暗号化", "🕵️ ログなし", "⚡ 高速転送", "📂 自動消去"], 
             drop: "ここにドロップ", fileLab: "クリックして選択", 
@@ -744,7 +768,7 @@
             hashHintSend: "AES-256キー設定後、受信側の絵文字と一致していればキーは正しいです！",
             hashHintRecv: "入力したAES-256キーが一致すれば、絵文字も一致します！",
 
-            /* [新增] AI & 隐私相关 */
+            /* AI & 隐私相关 */
             aiNote: "(選択されたファイル形式)",
             privWarn: "⚠️ プライバシー警告：ファイル名に機密情報（ID/パスポート/住所など）が含まれています。AES-256暗号化を強く推奨します！",
 
@@ -777,6 +801,9 @@
         },
         ko: { 
             tag: "KR",
+            /* [新增] 状态文字 */
+            on: "온라인", off: "오프라인",
+
             tabSend: "보내기", tabReceive: "받기", 
             badges: ["🔒 P2P 암호화", "🕵️ 로그 없음", "⚡ 고속 전송", "📂 자동 삭제"], 
             drop: "여기에 드롭", fileLab: "파일 선택 / 클릭", 
@@ -798,7 +825,7 @@
             hashHintSend: "AES-256 키 설정 후 수신자의 이모티콘과 일치하면 키가 올바른 것입니다!",
             hashHintRecv: "입력한 AES-256 키가 일치하면 이모티콘도 일치합니다!",
             
-            /* [新增] AI & 隐私相关 */
+            /* AI & 隐私相关 */
             aiNote: "(선택된 파일 유형)",
             privWarn: "⚠️ 개인정보 경고: 파일명에 민감한 정보(신분증/여권/주소 등)가 포함되어 있습니다. AES-256 암호화를 강력히 권장합니다!",
 
@@ -831,6 +858,9 @@
         },
         es: { 
             tag: "ES",
+            /* [新增] 状态文字 */
+            on: "En línea", off: "Desconectado",
+
             tabSend: "Enviar", tabReceive: "Recibir", 
             badges: ["🔒 Cifrado P2P", "🕵️ Sin Registros", "⚡ Alta Velocidad", "📂 Auto-Borrado"], 
             drop: "SOLTAR AQUÍ", fileLab: "Soltar / Clic", 
@@ -852,7 +882,7 @@
             hashHintSend: "Una vez configurada la clave AES-256, si los emojis coinciden, ¡la clave es correcta!",
             hashHintRecv: "¡Si la clave AES-256 coincide, los emojis también coincidirán!",
 
-            /* [新增] AI & 隐私相关 */
+            /* AI & 隐私相关 */
             aiNote: "(Tipos seleccionados)",
             privWarn: "⚠️ Alerta de privacidad: Los nombres de archivo indican información confidencial (ID/Pasaporte/Dirección). ¡Se recomienda encarecidamente el cifrado AES-256!",
 
@@ -885,6 +915,9 @@
         },
         hi: { 
             tag: "HI",
+            /* [新增] 状态文字 */
+            on: "ऑनलाइन", off: "ऑफलाइन",
+
             tabSend: "भेजें", tabReceive: "प्राप्त करें", 
             badges: ["🔒 P2P एन्क्रिप्शन", "🕵️ कोई लॉग नहीं", "⚡ तीव्र गति", "📂 ऑटो-वाइप"], 
             drop: "यहाँ छोड़ें", fileLab: "चुनें / क्लिक करें", 
@@ -906,7 +939,7 @@
             hashHintSend: "AES-256 कुंजी सेट करने के बाद, यदि इमोजी मेल खाते हैं, तो कुंजी सही है!",
             hashHintRecv: "यदि दर्ज की गई AES-256 कुंजी मेल खाती है, तो इमोजी भी मेल खाएंगे!",
             
-            /* [新增] AI & 隐私相关 */
+            /* AI & 隐私相关 */
             aiNote: "(चयनित प्रकार)",
             privWarn: "⚠️ गोपनीयता चेतावनी: फ़ाइल नाम में संवेदनशील जानकारी (आईडी/पासपोर्ट/पता) है। AES-256 एन्क्रिप्शन की अत्यधिक अनुशंसा की जाती है!",
 
@@ -1025,12 +1058,40 @@
         }
     };
 
+    /* [新增] 状态切换函数 */
+    function updateConnectionStatus(isOnline) {
+        const dot = document.getElementById('status-dot');
+        const text = document.getElementById('status-text');
+        
+        if (isOnline) {
+            dot.classList.remove('offline');
+            dot.classList.add('online');
+            text.classList.remove('offline');
+            text.classList.add('online');
+            text.innerText = (I18N[currLang] || I18N['en']).on;
+        } else {
+            dot.classList.remove('online');
+            dot.classList.add('offline');
+            text.classList.remove('online');
+            text.classList.add('offline');
+            text.innerText = (I18N[currLang] || I18N['en']).off;
+        }
+    }
+
     function applyI18N() {
         const userLang = navigator.language.split('-')[0];
         currLang = I18N[userLang] ? userLang : "en";
         const d = I18N[currLang] || I18N['en']; // Fallback
         const tagEl = document.getElementById('currentLangTag');
         if(tagEl) tagEl.innerText = d.tag;
+        
+        // [修改] 更新状态文字
+        const statusText = document.getElementById('status-text');
+        if(statusText) {
+            // 检查当前是不是红色（离线）状态
+            const isOffline = statusText.classList.contains('offline');
+            statusText.innerText = isOffline ? d.off : d.on;
+        }
         
         const map = {
             'tab-send': d.tabSend, 'tab-receive': d.tabReceive,
@@ -1047,7 +1108,7 @@
             'aes-off-txt': d.aesOff, 'aes-on-txt': d.aesOn, 
             'btn-ruthless-text': d.btnRuthless, 'faq-title': d.faqTitle,
             'pass-input-title': d.passTitle, 'btn-pass-confirm': d.passUnlock, 'btn-pass-cancel': d.passCancel,
-            // [新增] 括号说明更新
+            // 括号说明更新
             'ai-insight-note': d.aiNote
         };
         for (const [id, text] of Object.entries(map)) {
@@ -1094,6 +1155,7 @@
             inp.type = "password"; 
             const toggle = modal.querySelector('.pwd-toggle');
             if(toggle) toggle.innerText = "🙈";
+            
             /* 清空并隐藏上次的指纹 */
             document.getElementById('recv-fingerprint').innerText = "";
             document.getElementById('recv-fingerprint').style.display = 'none';
@@ -1181,6 +1243,7 @@
         pwdInput.type = "password";
         const toggle = document.querySelector('#crypto-modal .pwd-toggle');
         if(toggle) toggle.innerText = "🙈";
+        /* 清空并隐藏指纹 */
         document.getElementById('send-fingerprint').innerText = "";
         document.getElementById('send-fingerprint').style.display = 'none';
         document.getElementById('send-hash-hint').style.display = 'none';
@@ -1223,7 +1286,7 @@
         if (stagedFiles.length === 0) {
             list.style.display = 'none';
             document.getElementById('file-count-badge').style.display = 'none';
-            AIEngine.renderTags([]); // 清空 AI 分析
+            AIEngine.renderTags([]); 
         } else {
             list.style.display = 'block';
             const badge = document.getElementById('file-count-badge');
@@ -1232,10 +1295,8 @@
             list.innerHTML = stagedFiles.map((f, i) => 
                 `<div class="staged-item"><span>${getFileIcon(f.name)} ${f.name.length > 15 ? f.name.substring(0,12)+'...' : f.name}</span><span style="color:var(--danger); cursor:pointer; font-weight:bold; padding:0 5px;" onclick="stagedFiles.splice(${i},1);renderStagedList()">✕</span></div>`
             ).join('');
-            
-            // [新增] 触发 AI 引擎进行分析（包括隐私检测）
-            const aiData = AIEngine.analyze(stagedFiles);
-            AIEngine.renderTags(aiData);
+            const aiTags = AIEngine.analyze(stagedFiles);
+            AIEngine.renderTags(aiTags);
         }
     }
 
@@ -1275,11 +1336,15 @@
         peer = new Peer(PREFIX + code);
         
         peer.on('open', () => {
+            updateConnectionStatus(true); // Online
             const area = document.getElementById('senderCodeArea'); if (area) { area.style.display = 'block'; setTimeout(() => { area.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 200); }
             document.getElementById('myCode').innerText = code; document.getElementById('qrcode').innerHTML = ""; 
             new QRCode(document.getElementById('qrcode'), { text: window.location.origin + window.location.pathname + "?c=" + code, width: 140, height: 140 });
             startExpiryTimer();
         });
+        
+        peer.on('error', () => { updateConnectionStatus(false); });
+        peer.on('disconnected', () => { updateConnectionStatus(false); });
 
         peer.on('connection', c => {
             c.on('data', d => { 
@@ -1323,6 +1388,7 @@
         downloadDotsIdx = setInterval(() => { dots = (dots + 1) % 4; btn.innerText = "Downloading" + ".".repeat(dots); }, 400);
 
         rPeer.on('open', () => {
+            updateConnectionStatus(true); // Online
             const conn = rPeer.connect(PREFIX + code, { reliable: true }); activeConn = conn;
             let meta = null, chunks = [], totalRecv = 0, startTime = Date.now(), lastUpdate = 0;
             
@@ -1444,6 +1510,9 @@
                 }
             });
         });
+        
+        rPeer.on('error', () => { updateConnectionStatus(false); });
+        rPeer.on('disconnected', () => { updateConnectionStatus(false); });
     }
 
     function addHistory(name, type) {
@@ -1495,6 +1564,7 @@
         if(expiryTimerIdx) clearInterval(expiryTimerIdx); 
         window.scrollTo({ top: 0, behavior: 'smooth' }); 
         setTimeout(() => window.scrollTo(0,0), 300);
+        updateConnectionStatus(false); // Reset to offline on stop
     }
     
     function resetReceiver() { 
@@ -1512,6 +1582,7 @@
         const badge = document.getElementById('recv-text-count');
         if(badge) badge.style.display = 'none';
         activeConn = null; 
+        updateConnectionStatus(false); // Reset to offline
     }
     function switchTab(m, e) { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.panel').forEach(p => p.classList.remove('active')); e.target.classList.add('active'); document.getElementById(`panel-${m}`).classList.add('active'); }
     
