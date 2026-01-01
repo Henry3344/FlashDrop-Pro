@@ -48,7 +48,7 @@
         .trust-badges { display: flex; gap: 8px; margin-top: 10px; font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); flex-wrap: nowrap; justify-content: center; width: 100%; overflow: hidden; }
         .trust-badges span { background: rgba(99, 102, 241, 0.2); padding: 4px 8px; border-radius: 6px; border: 1.5px solid var(--border); color: #c7d2fe; white-space: nowrap; flex-shrink: 0; }
         
-        /* AI Badge Style - 已优化 */
+        /* AI Badge Style */
         .ai-badge { border-color: var(--ai) !important; color: #d8b4fe !important; background: rgba(139, 92, 246, 0.15) !important; box-shadow: 0 0 10px rgba(139, 92, 246, 0.3); }
 
         /* --- 布局容器 --- */
@@ -540,7 +540,7 @@
         }
     }
 
-    /* --- [多语言配置中心：AI图标已更新为✨] --- */
+    /* --- [多语言配置中心：AI图标已更新为✨，密码提示已优化] --- */
     const I18N = {
         en: { 
             tag: "EN", 
@@ -561,7 +561,9 @@
             
             passTitle: "🔐 Enter Password", passPlaceholder: "Type password...", passUnlock: "UNLOCK", passCancel: "CANCEL",
             passWrong: "Wrong Password!", passRemaining: "attempts left",
-            passWeak: "Password too weak!\nMust be at least 8 characters and include:\n- Uppercase\n- Lowercase\n- Number\n- Special Char",
+            
+            /* 英语温馨提示 */
+            passWeak: "For your file/text safety, please set a password of at least 8 characters, containing:\n- 1 Uppercase\n- 1 Lowercase\n- 1 Number\n- 1 Symbol",
             
             step1: "Select Files<br><span style='font-size:9px; opacity:0.7'>(Type Text)</span>", 
             step2: "Set AES-256<br><span style='font-size:9px; opacity:0.7'>(Option)</span>", 
@@ -580,32 +582,15 @@
             aiInsight: "✨ AI Insights", aiLocal: "Local Processing",
             aiTags: { img: "🖼️ Image", vid: "🎬 Video", doc: "📄 Document", code: "💻 Code", zip: "📦 Archive", big: "🐘 Large File" },
             
-            faqQ1: "Do my files pass through your servers?", 
-            faqA1: "No. FlashDrop Pro utilizes a serverless P2P architecture powered by WebRTC. Data streams directly between peers. Our signaling server only handshakes the connection and never touches the file data.",
-            
-            faqQ2: "Do you retain any logs or metadata?", 
-            faqA2: "Absolutely not. We operate on a 'Zero-Knowledge' basis. We do not store IP addresses, file names, or transfer logs. Once the browser tab is closed, all traces effectively vanish from volatile memory.",
-            
-            faqQ3: "What encryption standards are used?", 
-            faqA3: "All transfers are secured via WebRTC's mandatory DTLS/SRTP encryption. If you enable the optional password protection, we apply an additional layer of AES-256-GCM client-side encryption before transmission.",
-            
-            faqQ4: "Is my IP address visible?", 
-            faqA4: "Due to the nature of direct P2P connections, the recipient's device must know your IP to establish a link. If anonymity is a concern, we recommend using a VPN or Tor.",
-            
-            faqQ5: "Is it safe for confidential documents?", 
-            faqA5: "Yes. Since data never rests on a third-party server, the attack surface is minimal. It is ideal for legal, medical, or proprietary data transfer.",
-            
-            faqQ6: "Can I recover files after closing the tab?", 
-            faqA6: "No. Data exists only in your browser's RAM (volatile memory). Once the session ends or the tab is closed, the data is irretrievably lost.",
-            
-            faqQ7: "Can FlashDrop staff access my files?", 
-            faqA7: "Impossible. We possess no decryption keys and host no file storage. Mathematically, we cannot access your data even if compelled by law.",
-            
-            faqQ8: "Is the password mandatory?", 
-            faqA8: "No, it is optional. However, for sensitive data, we strongly recommend it to prevent interception by anyone on the same local network.",
-            
-            faqQ9: "I forgot the password. Can you reset it?", 
-            faqA9: "No. We do not store passwords. If you lose the password, the encrypted data cannot be recovered by anyone, including us.",
+            faqQ1: "Do my files pass through your servers?", faqA1: "No. FlashDrop Pro utilizes a serverless P2P architecture powered by WebRTC. Data streams directly between peers.",
+            faqQ2: "Do you retain any logs or metadata?", faqA2: "Absolutely not. We operate on a 'Zero-Knowledge' basis. We do not store IP addresses or file logs.",
+            faqQ3: "What encryption standards are used?", faqA3: "All transfers are secured via WebRTC's DTLS/SRTP. Optional password protection adds AES-256-GCM.",
+            faqQ4: "Is my IP address visible?", faqA4: "Due to P2P nature, the recipient needs your IP to connect. Use VPN for anonymity.",
+            faqQ5: "Is it safe for confidential documents?", faqA5: "Yes. Data never rests on a third-party server, minimizing attack surface.",
+            faqQ6: "Can I recover files after closing tab?", faqA6: "No. Data exists only in RAM. Once closed, it is lost forever.",
+            faqQ7: "Can staff access my files?", faqA7: "Impossible. We have no keys and no storage.",
+            faqQ8: "Is password mandatory?", faqA8: "Optional, but recommended for sensitive data on local networks.",
+            faqQ9: "Can you reset lost password?", faqA9: "No. We don't store passwords. Data cannot be recovered without it.",
             
             techPhrases: ["Generating RSA-4096 Key...", "Initializing WebRTC Handshake...", "Establishing P2P Tunnel...", "Synchronizing Peer Signals...", "Channel Secured!"]
         },
@@ -628,7 +613,9 @@
             
             passTitle: "🔐 输入密码", passPlaceholder: "在此输入...", passUnlock: "解锁", passCancel: "取消",
             passWrong: "❌ 密码错误！", passRemaining: "次尝试机会。",
-            passWeak: "密码太弱！\n必须包含8位以上，且含有：\n- 大写字母\n- 小写字母\n- 数字\n- 特殊符号",
+            
+            /* 中文温馨提示 */
+            passWeak: "为了您的文件/文字安全，请至少设置8位数密码，并确保包含：\n- 1位大写字母\n- 1位小写字母\n- 1位数字\n- 1位标点符号",
 
             step1: "选文件<br><span style='font-size:9px; opacity:0.7'>(可输文字)</span>", 
             step2: "设密码<br><span style='font-size:9px; opacity:0.7'>(可选加密)</span>", 
@@ -647,28 +634,222 @@
             aiInsight: "✨ AI 智能分析", aiLocal: "本地处理",
             aiTags: { img: "🖼️ 图像", vid: "🎬 视频", doc: "📄 文档", code: "💻 代码", zip: "📦 压缩包", big: "🐘 大文件" },
 
-            faqQ1: "文件会经过你们的服务器吗？", 
-            faqA1: "不会。FlashDrop Pro 采用基于 WebRTC 的无服务器 P2P 架构。数据流直接在对等端之间传输。我们的信令服务器仅用于握手连接，绝不接触文件数据。",
-            faqQ2: "你们会保留日志或元数据吗？", 
-            faqA2: "绝不。我们基于“零知识”原则运营。我们不存储 IP 地址、文件名或传输日志。一旦浏览器标签页关闭，所有痕迹都会从易失性内存中消失。",
-            faqQ3: "使用了什么加密标准？", 
-            faqA3: "所有传输均通过 WebRTC 强制的 DTLS/SRTP 加密协议进行保护。如果您启用可选的密码保护，我们会在传输前应用额外的 AES-256-GCM 客户端加密。",
-            faqQ4: "对方能看到我的 IP 地址吗？", 
-            faqA4: "由于 P2P 直连的特性，接收方设备必须知道您的 IP 才能建立链接。如果您介意这一点，建议配合 VPN 或 Tor 使用。",
-            faqQ5: "传输机密文件安全吗？", 
-            faqA5: "非常安全。由于数据从未驻留在第三方服务器上，攻击面极小。非常适合法律、医疗或专有数据的传输。",
-            faqQ6: "关闭页面后还能恢复文件吗？", 
-            faqA6: "不能。数据仅存在于您的浏览器 RAM（易失性内存）中。一旦会话结束或标签页关闭，数据将不可挽回地丢失。",
-            faqQ7: "FlashDrop 员工能查看我的文件吗？", 
-            faqA7: "不可能。我们没有解密密钥，也不托管文件存储。从数学和技术上讲，即使受到法律强制，我们也无法访问您的数据。",
-            faqQ8: "必须要设置密码吗？", 
-            faqA8: "不是，这是可选的。但对于敏感数据，我们强烈建议设置密码，以防止同一局域网内的中间人攻击。",
-            faqQ9: "我忘了密码，能重置吗？", 
-            faqA9: "不能。我们不存储密码。如果您丢失了密码，加密数据将无法被任何人（包括我们）恢复。",
+            faqQ1: "文件会经过你们的服务器吗？", faqA1: "不会。FlashDrop Pro 采用 WebRTC 无服务器 P2P 架构。数据直连传输。",
+            faqQ2: "你们会保留日志吗？", faqA2: "绝不。我们零知识运营，不存 IP 或日志。",
+            faqQ3: "使用什么加密？", faqA3: "WebRTC 强制 DTLS/SRTP。密码保护增加 AES-256-GCM。",
+            faqQ4: "对方能看到我IP吗？", faqA4: "P2P 需要 IP 直连。介意请用 VPN。",
+            faqQ5: "传机密文件安全吗？", faqA5: "安全。数据不经过第三方服务器。",
+            faqQ6: "关掉页面能恢复吗？", faqA6: "不能。数据只在内存里，关掉即焚。",
+            faqQ7: "员工能看文件吗？", faqA7: "不能。我们没密钥也没存储。",
+            faqQ8: "必须设密码吗？", faqA8: "可选。但建议局域网内使用时设置。",
+            faqQ9: "能重置密码吗？", faqA9: "不能。忘了就真没了。",
 
             techPhrases: ["正在生成 RSA-4096 密钥...", "初始化 WebRTC 握手...", "建立 P2P 加密隧道...", "同步对等信号...", "安全通道已建立!"]
+        },
+        ja: { 
+            tag: "JP",
+            tabSend: "送信", tabReceive: "受信", 
+            badges: ["🔒 P2P暗号化", "🕵️ ログなし", "⚡ 高速転送", "📂 自動消去"], 
+            drop: "ここにドロップ", fileLab: "クリックして選択", 
+            shareF: "ファイルを共有", shareT: "テキストを共有", 
+            connect: "ダウンロード", save: "📥 保存する", 
+            recv: "👀 テキスト表示", decryptRecv: "🔓 復号して表示", decryptSave: "🔓 復号して保存", saveNow: "💾 保存をクリック",
+
+            exp: "有効期限: ", copyLink: "📋 リンクをコピー", stop: "停止",
+            guide: "QRコードをスキャンするか、コードを入力してください。", 
+            coffee: "コーヒーを奢る", 
+            hPriv: "プライバシー", hSite: "サイトについて", hUs: "私たちについて",
+            inputErr: "6桁のコードを入力してください。", orScan: "QRスキャン 📷", 
+            doneRemind: "完了！上のボタンで保存してください。", 
+            histTitle: "最近の履歴", fileErr: "ファイルを選択してください。", textErr: "テキストを入力してください。",
+            passTitle: "🔐 パスワード入力", passPlaceholder: "ここに入力...", passUnlock: "解除", passCancel: "キャンセル",
+            passWrong: "❌ パスワードが違います！", passRemaining: "回試行可能。",
+            
+            /* 日语温馨提示 */
+            passWeak: "安全のため、8文字以上で以下を含めて設定してください：\n- 大文字1つ\n- 小文字1つ\n- 数字1つ\n- 記号1つ",
+
+            step1: "ファイル選択<br><span style='font-size:9px; opacity:0.7'>(テキスト可)</span>", 
+            step2: "暗号化設定<br><span style='font-size:9px; opacity:0.7'>(任意)</span>", 
+            step3: "コード取得", 
+            step4: "ダウンロード",
+
+            heroTitle: "安全なファイル共有。私たちも見えません。",
+            heroSub: "P2P直接転送。AES-256暗号化オプション。サーバーなし。",
+            sig1: "無制限", sig2: "P2Pのみ", sig3: "自動消去",
+            modalTitle: "パスワード設定", btnEnable: "有効にする", btnCancel: "キャンセル",
+            aesOff: "AES-256 オフ", aesOn: "AES-256 オン", 
+            btnRuthless: "拒否する（今回のみ）",
+            strengthLevels: ["極弱", "弱", "普通", "やや強", "強", "極強", "最強"],
+            faqTitle: "よくある質問",
+            
+            aiInsight: "✨ AI 分析", aiLocal: "ローカル処理",
+            aiTags: { img: "🖼️ 画像", vid: "🎬 動画", doc: "📄 文書", code: "💻 コード", zip: "📦 圧縮", big: "🐘 大容量" },
+
+            faqQ1: "サーバーを経由しますか？", faqA1: "いいえ。WebRTCによるP2P直接転送です。",
+            faqQ2: "ログは保存されますか？", faqA2: "いいえ。ゼロ知識ベースで、ログは一切保存しません。",
+            faqQ3: "暗号化方式は？", faqA3: "WebRTCのDTLS/SRTPに加え、AES-256-GCMが利用可能です。",
+            faqQ4: "IPは見えますか？", faqA4: "P2Pの性質上、接続にはIPが必要です。",
+            faqQ5: "機密データは安全ですか？", faqA5: "はい。サーバーに保存されないため安全です。",
+            faqQ6: "復元できますか？", faqA6: "いいえ。メモリ上のデータは消えます。",
+            faqQ7: "運営は見れますか？", faqA7: "不可能です。鍵もデータも持ちません。",
+            faqQ8: "パスワードは必須？", faqA8: "任意ですが、推奨します。",
+            faqQ9: "リセットできますか？", faqA9: "いいえ。紛失すると復元できません。",
+
+            techPhrases: ["RSA鍵を生成中...", "WebRTCハンドシェイク...", "P2Pトンネル確立中...", "信号を同期中...", "安全な接続完了!"]
+        },
+        ko: { 
+            tag: "KR",
+            tabSend: "보내기", tabReceive: "받기", 
+            badges: ["🔒 P2P 암호화", "🕵️ 로그 없음", "⚡ 고속 전송", "📂 자동 삭제"], 
+            drop: "여기에 드롭", fileLab: "파일 선택 / 클릭", 
+            shareF: "파일 공유", shareT: "텍스트 공유", 
+            connect: "다운로드", save: "📥 저장", 
+            recv: "👀 텍스트 보기", decryptRecv: "🔓 복호화 및 보기", decryptSave: "🔓 복호화 및 저장", saveNow: "💾 저장하려면 클릭",
+
+            exp: "만료: ", copyLink: "📋 링크 복사", stop: "중지",
+            guide: "QR 코드를 스캔하거나 코드를 입력하세요.", 
+            coffee: "커피 한 잔 후원", 
+            hPriv: "개인정보", hSite: "사이트 정보", hUs: "회사 소개",
+            inputErr: "6자리 코드를 입력하세요.", orScan: "스캔하기 📷", 
+            doneRemind: "완료! 위 버튼을 눌러 저장하세요.", 
+            histTitle: "최근 기록", fileErr: "파일을 먼저 선택하세요.", textErr: "텍스트를 먼저 입력하세요.",
+            passTitle: "🔐 비밀번호 입력", passPlaceholder: "여기에 입력...", passUnlock: "잠금 해제", passCancel: "취소",
+            passWrong: "❌ 비밀번호 오류!", passRemaining: "회 시도 가능.",
+            
+            /* 韩语温馨提示 */
+            passWeak: "파일/텍스트 보안을 위해 8자 이상, 다음을 포함해 주세요:\n- 대문자 1개\n- 소문자 1개\n- 숫자 1개\n- 특수문자 1개",
+
+            step1: "파일 선택<br><span style='font-size:9px; opacity:0.7'>(텍스트 가능)</span>", 
+            step2: "비번 설정<br><span style='font-size:9px; opacity:0.7'>(선택 사항)</span>", 
+            step3: "코드 받기", 
+            step4: "다운로드",
+
+            heroTitle: "안전한 파일 공유. 서버 저장 없음.",
+            heroSub: "직접 P2P 전송. 선택적 AES-256 암호화.",
+            sig1: "무제한", sig2: "P2P 전용", sig3: "자동 삭제",
+            modalTitle: "비밀번호 설정", btnEnable: "활성화", btnCancel: "취소",
+            aesOff: "AES-256 끄기", aesOn: "AES-256 켜기",
+            btnRuthless: "거절하기 (이번만)",
+            strengthLevels: ["매우 약함", "약함", "보통", "약간 강함", "강함", "매우 강함", "최강"],
+            faqTitle: "자주 묻는 질문",
+            
+            aiInsight: "✨ AI 인사이트", aiLocal: "로컬 처리",
+            aiTags: { img: "🖼️ 이미지", vid: "🎬 동영상", doc: "📄 문서", code: "💻 코드", zip: "📦 압축", big: "🐘 대용량" },
+
+            faqQ1: "서버를 통과하나요?", faqA1: "아니요. WebRTC P2P로 직접 전송됩니다.",
+            faqQ2: "로그를 보관하나요?", faqA2: "아니요. 제로 지식 원칙을 따릅니다.",
+            faqQ3: "암호화 방식은?", faqA3: "WebRTC 암호화 + 선택적 AES-256-GCM.",
+            faqQ4: "IP가 보이나요?", faqA4: "P2P 연결을 위해 필요합니다.",
+            faqQ5: "기밀 문서에 안전한가요?", faqA5: "네. 제3자 서버에 저장되지 않습니다.",
+            faqQ6: "복구할 수 있나요?", faqA6: "아니요. 탭을 닫으면 사라집니다.",
+            faqQ7: "운영자가 볼 수 있나요?", faqA7: "불가능합니다. 키가 없습니다.",
+            faqQ8: "비번은 필수인가요?", faqA8: "선택입니다.",
+            faqQ9: "비번 리셋 가능?", faqA9: "불가능합니다.",
+
+            techPhrases: ["RSA 키 생성 중...", "WebRTC 연결 중...", "P2P 터널 수립 중...", "동기화 중...", "보안 연결 완료!"]
+        },
+        es: { 
+            tag: "ES",
+            tabSend: "Enviar", tabReceive: "Recibir", 
+            badges: ["🔒 Cifrado P2P", "🕵️ Sin Registros", "⚡ Alta Velocidad", "📂 Auto-Borrado"], 
+            drop: "SOLTAR AQUÍ", fileLab: "Soltar / Clic", 
+            shareF: "COMPARTIR ARCHIVOS", shareT: "COMPARTIR TEXTO", 
+            connect: "DESCARGAR", save: "📥 GUARDAR", 
+            recv: "👀 VER TEXTO", decryptRecv: "🔓 DESCIFRAR Y VER", decryptSave: "🔓 DESCIFRAR Y GUARDAR", saveNow: "💾 CLIC PARA GUARDAR",
+
+            exp: "Expira: ", copyLink: "📋 COPIAR ENLACE", stop: "DETENER",
+            guide: "Escanea el QR o introduce el código.", 
+            coffee: "invítame un café", 
+            hPriv: "Privacidad", hSite: "Sobre el sitio", hUs: "Sobre nosotros",
+            inputErr: "Introduce el código de 6 dígitos.", orScan: "o escanear 📷", 
+            doneRemind: "¡HECHO! Clic arriba para guardar.", 
+            histTitle: "Historial Reciente", fileErr: "Selecciona archivos primero.", textErr: "Introduce texto primero.",
+            passTitle: "🔐 Contraseña", passPlaceholder: "Escribe aquí...", passUnlock: "DESBLOQUEAR", passCancel: "CANCELAR",
+            passWrong: "❌ Contraseña incorrecta", passRemaining: "intentos restantes.",
+            
+            /* 西班牙语温馨提示 */
+            passWeak: "Para su seguridad, use al menos 8 caracteres con:\n- 1 Mayúscula\n- 1 Minúscula\n- 1 Número\n- 1 Símbolo",
+
+            step1: "Elegir Archivos<br><span style='font-size:9px; opacity:0.7'>(o Texto)</span>", 
+            step2: "Cifrado AES<br><span style='font-size:9px; opacity:0.7'>(Opcional)</span>", 
+            step3: "Obtener Código", 
+            step4: "Descargar",
+
+            heroTitle: "Intercambio seguro. Nadie nos ve.",
+            heroSub: "Transferencia P2P directa. Cifrado AES-256 opcional.",
+            sig1: "Sin Límites", sig2: "Solo P2P", sig3: "Auto-Borrado",
+            modalTitle: "Contraseña", btnEnable: "ACTIVAR", btnCancel: "CANCELAR",
+            aesOff: "AES-256 OFF", aesOn: "AES-256 ON", 
+            btnRuthless: "Rechazar (Solo esta vez)",
+            strengthLevels: ["Muy débil", "Débil", "Media", "Moderada", "Fuerte", "Muy fuerte", "Imbatible"],
+            faqTitle: "Preguntas Frecuentes",
+            
+            aiInsight: "✨ Análisis IA", aiLocal: "Procesamiento Local",
+            aiTags: { img: "🖼️ Imagen", vid: "🎬 Video", doc: "📄 Documento", code: "💻 Código", zip: "📦 Archivo", big: "🐘 Grande" },
+
+            faqQ1: "¿Pasan por servidores?", faqA1: "No. Usa arquitectura P2P sin servidor.",
+            faqQ2: "¿Guardan registros?", faqA2: "No. Operamos con 'Conocimiento Cero'.",
+            faqQ3: "¿Qué cifrado usan?", faqA3: "DTLS/SRTP de WebRTC + AES-256 opcional.",
+            faqQ4: "¿Es visible mi IP?", faqA4: "Sí, necesario para conexión directa.",
+            faqQ5: "¿Es seguro?", faqA5: "Sí, mínima superficie de ataque.",
+            faqQ6: "¿Se puede recuperar?", faqA6: "No. Se borra al cerrar.",
+            faqQ7: "¿El personal lo ve?", faqA7: "Imposible. No tenemos claves.",
+            faqQ8: "¿Contraseña obligatoria?", faqA8: "Opcional.",
+            faqQ9: "¿Restablecer contraseña?", faqA9: "No. No la guardamos.",
+
+            techPhrases: ["Generando Clave RSA...", "Iniciando WebRTC...", "Túnel P2P...", "Sincronizando...", "¡Canal Seguro!"]
+        },
+        hi: { 
+            tag: "HI",
+            tabSend: "भेजें", tabReceive: "प्राप्त करें", 
+            badges: ["🔒 P2P एन्क्रिप्शन", "🕵️ कोई लॉग नहीं", "⚡ तीव्र गति", "📂 ऑटो-वाइप"], 
+            drop: "यहाँ छोड़ें", fileLab: "चुनें / क्लिक करें", 
+            shareF: "फ़ाइलें साझा करें", shareT: "텍스트 साझा करें", 
+            connect: "डाउनलोड", save: "📥 सहेजें", 
+            recv: "👀 टेक्स्ट देखें", decryptRecv: "🔓 डिक्रिप्ट करें और देखें", decryptSave: "🔓 डिक्रिप्ट करें और सहेजें", saveNow: "💾 सहेजने के लिए क्लिक करें",
+
+            exp: "समाप्त: ", copyLink: "📋 लिंक कॉपी करें", stop: "रोकें",
+            guide: "QR स्कैन करें या कोड दर्ज करें।", 
+            coffee: "मुझे कॉफी पिलाएं", 
+            hPriv: "गोपनीयता", hSite: "साइट के बारे में", hUs: "हमारे बारे में",
+            inputErr: "6-अंकीय कोड दर्ज करें।", orScan: "स्कैन करें 📷", 
+            doneRemind: "पूर्ण! सहेजें पर क्लिक करें।", 
+            histTitle: "हाल का इतिहास", fileErr: "कृपया पहले फ़ाइलें चुनें।", textErr: "कृपया पहले टेक्स्ट दर्ज करें।",
+            passTitle: "🔐 पासवर्ड दर्ज करें", passPlaceholder: "यहाँ टाइप करें...", passUnlock: "अनलॉक", passCancel: "रद्द करें",
+            passWrong: "❌ गलत पासवर्ड!", passRemaining: "प्रयास शेष।",
+            
+            /* 印地语温馨提示 */
+            passWeak: "आपकी सुरक्षा के लिए, कृपया कम से कम 8 वर्णों का उपयोग करें:\n- 1 अपरकेस\n- 1 लोअरकेस\n- 1 नंबर\n- 1 प्रतीक",
+
+            step1: "फ़ाइलें चुनें<br><span style='font-size:9px; opacity:0.7'>(टेक्स्ट लिखें)</span>", 
+            step2: "पासवर्ड सेट करें<br><span style='font-size:9px; opacity:0.7'>(वैकल्पिक)</span>", 
+            step3: "कोड प्राप्त करें", 
+            step4: "डाउनलोड",
+
+            heroTitle: "सुरक्षित फ़ाइल शेयरिंग, हम भी नहीं देख सकते।",
+            heroSub: "सीधा P2P स्थानांतरण। वैकल्पिक AES-256 एन्क्रिप्शन।",
+            sig1: "कोई सीमा नहीं", sig2: "केवल P2P", sig3: "ऑटो-वाइप",
+            modalTitle: "पासवर्ड सेट करें", btnEnable: "सक्षम करें", btnCancel: "रद्द करें",
+            aesOff: "AES-256 बंद", aesOn: "AES-256 चालू",
+            btnRuthless: "अस्वीकार करें (केवल इस बार)",
+            strengthLevels: ["बहुत कमजोर", "कमजोर", "मध्यम", "थोड़ा मजबूत", "मजबूत", "बहुत मजबूत", "अटूट"],
+            faqTitle: "सामान्य प्रश्न",
+            
+            aiInsight: "✨ AI अंतर्दृष्टि", aiLocal: "स्थानीय प्रसंस्करण",
+            aiTags: { img: "🖼️ चित्र", vid: "🎬 वीडियो", doc: "📄 दस्तावेज़", code: "💻 कोड", zip: "📦 संग्रह", big: "🐘 बड़ी फ़ाइल" },
+
+            faqQ1: "क्या सर्वर से गुजरता है?", faqA1: "नहीं। P2P सीधा स्थानांतरण।",
+            faqQ2: "क्या लॉग रखते हैं?", faqA2: "नहीं। जीरो-नॉलेज।",
+            faqQ3: "एन्क्रिप्शन क्या है?", faqA3: "WebRTC + AES-256-GCM।",
+            faqQ4: "क्या आईपी दिखता है?", faqA4: "हाँ, कनेक्शन के लिए।",
+            faqQ5: "क्या यह सुरक्षित है?", faqA5: "हाँ। सर्वर पर नहीं रहता।",
+            faqQ6: "क्या पुनर्प्राप्त कर सकते हैं?", faqA6: "नहीं। बंद करने पर खो जाता है।",
+            faqQ7: "क्या आप देख सकते हैं?", faqA7: "नहीं। हमारे पास चाबी नहीं है।",
+            faqQ8: "क्या पासवर्ड जरूरी है?", faqA8: "वैकल्पिक।",
+            faqQ9: "पासवर्ड रीसेट?", faqA9: "नहीं। हम स्टोर नहीं करते।",
+
+            techPhrases: ["RSA कुंजी बना रहा है...", "WebRTC शुरू हो रहा है...", "P2P टनल...", "सिंक्रनाइज़ हो रहा है...", "चैनल सुरक्षित!"]
         }
-        // ... (其他语言如 JP, KO, ES, HI 等保留原有结构，仅需替换 aiInsight 中的 🤖 为 ✨ 即可，篇幅原因略过) ...
     };
 
     let currLang = "en", peer = null, stagedFiles = [], currentDownloads = 0, videoTrack = null, torchOn = false, activeConn = null, expiryTimerIdx = null;
@@ -731,7 +912,6 @@
             'aes-off-txt': d.aesOff, 'aes-on-txt': d.aesOn, 
             'btn-ruthless-text': d.btnRuthless, 'faq-title': d.faqTitle,
             'pass-input-title': d.passTitle, 'btn-pass-confirm': d.passUnlock, 'btn-pass-cancel': d.passCancel,
-            // 注意：这里删除了 'ai-insight-title'，因为我们在HTML里直接硬编码了 ✨ 图标，避免覆盖
         };
         for (const [id, text] of Object.entries(map)) {
             const el = document.getElementById(id);
@@ -767,7 +947,6 @@
             const btnOk = document.getElementById('btn-pass-confirm');
             const btnCancel = document.getElementById('btn-pass-cancel');
             
-            // 重置状态
             inp.type = "password"; 
             const toggle = modal.querySelector('.pwd-toggle');
             if(toggle) toggle.innerText = "🙈";
@@ -850,7 +1029,6 @@
     function showCryptoModal() { 
         if(isEncrypted) { isEncrypted = false; aesKey = ""; document.getElementById('crypto-password').value = ""; checkStrength(""); updateLockUI(); return; } 
         
-        // 重置弹窗状态
         const pwdInput = document.getElementById('crypto-password');
         pwdInput.type = "password";
         const toggle = document.querySelector('#crypto-modal .pwd-toggle');
