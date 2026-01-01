@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>FlashDrop Pro — AI-Powered Secure Transfer</title>
-<meta name="description" content="Share files instantly with optional AES-256 password protection. No accounts. No storage. No tracking.">
-<meta name="keywords" content="P2P file transfer, secure file sharing, zero server storage, WebRTC, encrypted transfer, no logs, 零日志文件分享, 匿名文件传输">
+<title>FlashDrop Pro — AI-Powered Secure Workspace</title>
+<meta name="description" content="Secure P2P file transfer with optional AES-256 encryption. No servers, no logs, no limits.">
+<meta name="keywords" content="P2P transfer, encrypted file sharing, WebRTC, privacy first, file drop">
 
 <meta property="og:title" content="FlashDrop Pro — Secure P2P Workspace">
 <meta property="og:description" content="Browser-based P2P file sharing. Files never touch our servers.">
@@ -18,22 +18,24 @@
     <style>
         :root { --primary: #6366f1; --bg: #030712; --card: rgba(30, 41, 59, 0.85); --text: #f8fafc; --text-muted: #94a3b8; --border: #4f46e5; --nav-bg: rgba(15, 23, 42, 0.98); --danger: #ef4444; --success: #10b981; --ai: #8b5cf6; }
         * { box-sizing: border-box; outline: none; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; min-height: 100vh; overflow-x: hidden; display: flex; flex-direction: column; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; min-height: 100vh; overflow-x: hidden; display: flex; flex-direction: column; }
         
         .app-container { display: flex; flex-direction: column; min-height: 100vh; width: 100%; padding-top: 130px; transition: opacity 0.5s; }
         body.is-blocked .app-container { opacity: 0.15; pointer-events: none; }
 
+        /* --- 安全警告 & 广告拦截 --- */
         #safety-notice-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 999999; display: none; justify-content: center; align-items: center; padding: 20px; background: rgba(3, 7, 18, 0.9); backdrop-filter: blur(8px); }
         .safety-card { background: #111827; padding: 40px 30px; border-radius: 32px; border: 1px solid var(--border); text-align: center; max-width: 420px; width: 100%; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); }
         .safety-card .icon { font-size: 48px; margin-bottom: 20px; }
         .safety-card h3 { color: var(--text); margin: 0 0 15px 0; font-size: 22px; font-weight: 900; letter-spacing: 1px; }
         .safety-card p.safety-text { font-size: 14px; color: var(--text-muted); line-height: 1.8; margin-bottom: 30px; display: block !important; visibility: visible !important; }
 
+        /* --- 背景星星动画 --- */
         .stars-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%); pointer-events: none; }
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: moveStars linear infinite; }
         @keyframes moveStars { from { transform: translateY(0); } to { transform: translateY(-1000px); } }
         
-        /* z-index 5000 确保导航栏置顶 */
+        /* --- 导航栏 --- */
         .navbar { position: fixed; top: 0; left: 0; right: 0; height: 110px; background: var(--nav-bg); border-bottom: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 5000; backdrop-filter: blur(25px); padding: 10px; box-shadow: 0 4px 30px rgba(0,0,0,0.5); }
         .logo-wrap { display: flex; align-items: center; gap: 12px; }
         .logo { font-size: 30px; font-weight: 900; color: white; letter-spacing: 2px; }
@@ -49,6 +51,7 @@
         /* AI Badge Style */
         .ai-badge { border-color: var(--ai) !important; color: #d8b4fe !important; background: rgba(139, 92, 246, 0.15) !important; box-shadow: 0 0 10px rgba(139, 92, 246, 0.3); }
 
+        /* --- 布局容器 --- */
         .main-wrapper { display: flex; width: 100%; margin: 0 auto; justify-content: center; align-items: flex-start; gap: 20px; padding: 0 15px; }
         .content-area { flex: 1; min-width: 300px; max-width: 600px; display: flex; flex-direction: column; align-items: center; z-index: 50; }
         
@@ -69,13 +72,69 @@
         @media (max-width: 550px) { .share-grid { grid-template-columns: 1fr; } }
         .column-box { display: flex; flex-direction: column; gap: 10px; min-height: 220px; }
         
-        /* Drop Zone */
+        /* --- 拖拽区域 --- */
         #drop-zone { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: rgba(3, 7, 18, 0.95); display: none; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
-        .file-zone { border: 2.5px dashed var(--border); border-radius: 20px; padding: 25px; background: rgba(15, 23, 42, 0.5); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 150px; text-align: center; transition: 0.3s; backdrop-filter: blur(15px); }
+        .file-zone { position: relative; border: 2.5px dashed var(--border); border-radius: 20px; padding: 25px; background: rgba(15, 23, 42, 0.5); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 150px; text-align: center; transition: 0.3s; backdrop-filter: blur(15px); }
         .file-zone.drag-active, #drop-zone.drag-active { background: rgba(99, 102, 241, 0.3); border-color: #fff; transform: scale(1.02); }
         
-        .text-zone { border: 1.5px solid var(--border); border-radius: 20px; padding: 20px; background: rgba(15, 23, 42, 0.5); display: flex; flex-direction: column; flex: 1; min-height: 150px; backdrop-filter: blur(15px); }
-        textarea { background: transparent; border: none; color: white; resize: none; width: 100%; flex: 1; font-size: 14px; margin-top: 8px; }
+        /* --- 文本区域 (核心修改：固定角标) --- */
+        .text-zone { 
+            position: relative; /* 关键：作为绝对定位角标的父容器 */
+            border: 1.5px solid var(--border); 
+            border-radius: 20px; 
+            background: rgba(15, 23, 42, 0.5); 
+            display: flex; 
+            flex-direction: column; 
+            flex: 1; 
+            min-height: 150px; 
+            backdrop-filter: blur(15px);
+            overflow: hidden; /* 防止内容溢出圆角 */
+        }
+        
+        /* 接收端只读模式特殊样式 */
+        .text-zone.readonly { 
+            border-color: var(--success); 
+            background: rgba(16, 185, 129, 0.05); 
+            height: 200px; /* 固定高度 */
+        }
+
+        /* 内部滚动容器：让文字在这里面滚，而不是整个框滚 */
+        .text-content-scroll {
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            overflow-y: auto;
+            color: white;
+            font-size: 14px;
+            background: transparent;
+            resize: none;
+            border: none;
+            box-sizing: border-box;
+        }
+        
+        /* 美化滚动条 */
+        .text-content-scroll::-webkit-scrollbar { width: 6px; }
+        .text-content-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+        .text-content-scroll::-webkit-scrollbar-track { background: transparent; }
+
+        textarea { background: transparent; border: none; color: white; resize: none; width: 100%; flex: 1; font-size: 14px; padding: 20px; margin: 0; outline: none; }
+
+        /* --- 角标 (Badge) 样式 --- */
+        .zone-badge { 
+            position: absolute; 
+            top: 10px; 
+            right: 12px; 
+            font-size: 10px; 
+            font-weight: 800; 
+            color: var(--text-muted); 
+            background: rgba(0,0,0,0.4); 
+            padding: 4px 8px; 
+            border-radius: 6px; 
+            pointer-events: none; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            z-index: 10; 
+            backdrop-filter: blur(4px);
+        }
 
         #stagedList { display: none; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border); border-radius: 12px; padding: 10px; margin-bottom: 10px; max-height: 120px; overflow-y: auto; }
         .staged-item { display: flex; justify-content: space-between; align-items: center; font-size: 12px; padding: 6px 10px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 5px; }
@@ -89,7 +148,7 @@
         button.action-btn:active { transform: scale(0.97); }
 
         .nerd-stats { display: flex; justify-content: space-between; font-size: 11px; color: var(--success); font-family: monospace; font-weight: 900; margin-bottom: 10px; align-items: center; }
-        #receivedText-container { display: none; margin-top: 20px; background: rgba(99, 102, 241, 0.15); border: 1px solid var(--primary); padding: 15px; border-radius: 18px; }
+        #receivedText-container { display: none; margin-top: 20px; width:100%; }
         
         .history-box { width: 100%; max-width: 600px; margin-top: 40px; padding: 0 15px; }
         .history-title { font-size: 13px; font-weight: 900; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
@@ -261,7 +320,12 @@
                 <div id="panel-send" class="panel active">
                     <div class="share-grid">
                         <div class="column-box">
-                            <label class="file-zone" id="file-drop-area" for="fileInput"><div style="font-size: 42px;">📂</div><div id="label-files" style="font-size:13px; margin-top:10px; font-weight:900;">Drop / Click</div></label>
+                            <label class="file-zone" id="file-drop-area" for="fileInput">
+                                <div id="file-count-badge" class="zone-badge" style="display:none;">0 Files</div>
+                                <div style="font-size: 42px;">📂</div>
+                                <div id="label-files" style="font-size:13px; margin-top:10px; font-weight:900;">Drop / Click</div>
+                            </label>
+                            
                             <div id="ai-suggestions">
                                 <div style="display:flex; justify-content:space-between; align-items:center;">
                                     <strong>🤖 AI Insights</strong>
@@ -273,7 +337,11 @@
                             <button class="action-btn" id="btn-share-files" onclick="triggerAd('send-file')">SHARE FILES</button>
                         </div>
                         <div class="column-box">
-                            <div class="text-zone"><div id="label-text-hint" style="font-size:12px; color:var(--text-muted); font-weight:900;">Quick Text</div><textarea id="quickText" placeholder="Paste..."></textarea></div>
+                            <div class="text-zone">
+                                <div id="text-count-badge" class="zone-badge" style="display:none;">0 Chars</div>
+                                <div id="label-text-hint" style="font-size:12px; color:var(--text-muted); font-weight:900; margin: 20px 0 0 20px;">Quick Text</div>
+                                <textarea id="quickText" placeholder="Paste..." oninput="updateTextCount(this)"></textarea>
+                            </div>
                             <button class="action-btn" id="btn-share-text" onclick="triggerAd('send-text')">SHARE TEXT</button>
                         </div>
                     </div>
@@ -344,7 +412,15 @@
                         <div id="receive-pg-container" class="pg-container"><div id="receive-pg-bar" class="pg-bar"></div></div>
                         <div id="receiveNerdStats" class="nerd-stats" style="display:none; width:100%; margin-top:5px;"><span id="nerd-speed">0.0 MB/s</span><span class="blink-warn">Downloading... Keep Open!</span><span id="nerd-eta" style="color:var(--primary)">ETA: --s</span></div>
                         
-                        <div id="receivedText-container"><div id="receivedText" style="color:white; margin-bottom:15px; word-break: break-all;"></div><button class="action-btn" id="btn-copy-text" onclick="copyReceivedText()">📋 COPY</button></div>
+                        <div id="receivedText-container">
+                            <div class="text-zone readonly">
+                                <div id="recv-text-count" class="zone-badge" style="display:none;">0 Chars</div>
+                                <div id="recv-scroll-box" class="text-content-scroll">
+                                    <div id="receivedText" style="white-space: pre-wrap; word-break: break-all;"></div>
+                                </div>
+                            </div>
+                            <button class="action-btn" id="btn-copy-text" onclick="copyReceivedText()" style="margin-top: 15px;">📋 COPY</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -365,15 +441,15 @@
     <footer class="legal-footer">
         <div class="faq-container">
             <h3 id="faq-title">Common Questions</h3>
-            <details><summary id="faq-q1">Do my files ever touch your servers?</summary><div class="faq-answer" id="faq-a1">No. FlashDrop Pro uses peer-to-peer (P2P) connections powered by WebRTC. Files and text are sent directly between browsers and are never uploaded to or stored on our servers.</div></details>
-            <details><summary id="faq-q2">Do you store logs or track users?</summary><div class="faq-answer" id="faq-a2">No. FlashDrop Pro does not store IP addresses, transfer logs, file names, or user identities. We do not use tracking cookies or build user profiles.</div></details>
-            <details><summary id="faq-q3">How is the data secured during transfer?</summary><div class="faq-answer" id="faq-a3">Transfers are encrypted using standard WebRTC security mechanisms. Data is encrypted in transit and is never decrypted by FlashDrop Pro servers.</div></details>
-            <details><summary id="faq-q4">Can the recipient see my IP address?</summary><div class="faq-answer" id="faq-a4">Because FlashDrop Pro uses direct peer-to-peer connections, your IP address may be visible to the receiving peer. We recommend using a VPN if this is a concern.</div></details>
-            <details><summary id="faq-q5">Is FlashDrop Pro suitable for sensitive files?</summary><div class="faq-answer" id="faq-a5">FlashDrop Pro is designed for privacy. Since files are not stored on servers, exposure risk is minimal. However, you are responsible for what you share.</div></details>
-            <details><summary id="faq-q6">Can I recover a file after the session?</summary><div class="faq-answer" id="faq-a6">No. Once a session ends or the browser tab is closed, the data is destroyed and cannot be recovered by anyone.</div></details>
-            <details><summary id="faq-q7">Can FlashDrop Pro see my files?</summary><div class="faq-answer" id="faq-a7">No. Files are transferred directly between devices. If encrypted, we absolutely cannot access them.</div></details>
-            <details><summary id="faq-q8">Is the password required?</summary><div class="faq-answer" id="faq-a8">No. Password protection is optional for extra security.</div></details>
-            <details><summary id="faq-q9">What if I forget the password?</summary><div class="faq-answer" id="faq-a9">Encrypted files cannot be recovered without the correct password. There is no "forgot password" feature.</div></details>
+            <details><summary id="faq-q1">...</summary><div class="faq-answer" id="faq-a1">...</div></details>
+            <details><summary id="faq-q2">...</summary><div class="faq-answer" id="faq-a2">...</div></details>
+            <details><summary id="faq-q3">...</summary><div class="faq-answer" id="faq-a3">...</div></details>
+            <details><summary id="faq-q4">...</summary><div class="faq-answer" id="faq-a4">...</div></details>
+            <details><summary id="faq-q5">...</summary><div class="faq-answer" id="faq-a5">...</div></details>
+            <details><summary id="faq-q6">...</summary><div class="faq-answer" id="faq-a6">...</div></details>
+            <details><summary id="faq-q7">...</summary><div class="faq-answer" id="faq-a7">...</div></details>
+            <details><summary id="faq-q8">...</summary><div class="faq-answer" id="faq-a8">...</div></details>
+            <details><summary id="faq-q9">...</summary><div class="faq-answer" id="faq-a9">...</div></details>
         </div>
 
         <div style="margin-bottom: 5px;">
@@ -448,7 +524,7 @@
     <button class="action-btn" style="width:180px; background:#334155; margin-top: 20px; z-index:10002;" onclick="closeScanner()">CLOSE</button>
 </div>
 <script>
-    /* --- [多语言配置中心] --- */
+    /* --- [多语言配置中心：专业版] --- */
     const I18N = {
         en: { 
             tag: "EN", 
@@ -469,6 +545,7 @@
             
             passTitle: "🔐 Enter Password", passPlaceholder: "Type password...", passUnlock: "UNLOCK", passCancel: "CANCEL",
             passWrong: "Wrong Password!", passRemaining: "attempts left",
+            passWeak: "Password too weak!\nMust be at least 8 characters and include:\n- Uppercase\n- Lowercase\n- Number\n- Special Char",
             
             step1: "Select Files<br><span style='font-size:9px; opacity:0.7'>(Type Text)</span>", 
             step2: "Set AES-256<br><span style='font-size:9px; opacity:0.7'>(Option)</span>", 
@@ -480,24 +557,41 @@
             sig1: "No Limits", sig2: "P2P Only", sig3: "Auto-Wipe",
             modalTitle: "Set Password", btnEnable: "ENABLE", btnCancel: "CANCEL",
             aesOff: "AES-256 OFF", aesOn: "AES-256 ON",
-            passWeak: "Password too weak!\nMust be at least 8 characters and include:\n- Uppercase\n- Lowercase\n- Number\n- Special Char",
             btnRuthless: "Ruthless Refusal (Session only)",
             strengthLevels: ["Very Weak", "Weak", "Medium", "Moderate", "Strong", "Very Strong", "Unbreakable"],
             faqTitle: "Common Questions",
             
-            // AI Strings
             aiInsight: "🤖 AI Insights", aiLocal: "Local Processing",
             aiTags: { img: "🖼️ Image", vid: "🎬 Video", doc: "📄 Document", code: "💻 Code", zip: "📦 Archive", big: "🐘 Large File" },
             
-            faqQ1: "Do my files ever touch your servers?", faqA1: "No. Files are sent directly between browsers via P2P.",
-            faqQ2: "Do you store logs?", faqA2: "No. We don't store IPs or logs.",
-            faqQ3: "How is data secured?", faqA3: "End-to-end encryption via WebRTC.",
-            faqQ4: "Can recipient see my IP?", faqA4: "Yes, P2P requires direct connection.",
-            faqQ5: "Suitable for sensitive files?", faqA5: "Yes. Zero-knowledge architecture.",
-            faqQ6: "Can I recover files later?", faqA6: "No. Data is gone when closed.",
-            faqQ7: "Can FlashDrop see my files?", faqA7: "No. Impossible by design.",
-            faqQ8: "Is password required?", faqA8: "No. It's optional.",
-            faqQ9: "Forgot password?", faqA9: "Files cannot be recovered.",
+            /* 专业级 FAQ - English */
+            faqQ1: "Do my files pass through your servers?", 
+            faqA1: "No. FlashDrop Pro utilizes a serverless P2P architecture powered by WebRTC. Data streams directly between peers. Our signaling server only handshakes the connection and never touches the file data.",
+            
+            faqQ2: "Do you retain any logs or metadata?", 
+            faqA2: "Absolutely not. We operate on a 'Zero-Knowledge' basis. We do not store IP addresses, file names, or transfer logs. Once the browser tab is closed, all traces effectively vanish from volatile memory.",
+            
+            faqQ3: "What encryption standards are used?", 
+            faqA3: "All transfers are secured via WebRTC's mandatory DTLS/SRTP encryption. If you enable the optional password protection, we apply an additional layer of AES-256-GCM client-side encryption before transmission.",
+            
+            faqQ4: "Is my IP address visible?", 
+            faqA4: "Due to the nature of direct P2P connections, the recipient's device must know your IP to establish a link. If anonymity is a concern, we recommend using a VPN or Tor.",
+            
+            faqQ5: "Is it safe for confidential documents?", 
+            faqA5: "Yes. Since data never rests on a third-party server, the attack surface is minimal. It is ideal for legal, medical, or proprietary data transfer.",
+            
+            faqQ6: "Can I recover files after closing the tab?", 
+            faqA6: "No. Data exists only in your browser's RAM (volatile memory). Once the session ends or the tab is closed, the data is irretrievably lost.",
+            
+            faqQ7: "Can FlashDrop staff access my files?", 
+            faqA7: "Impossible. We possess no decryption keys and host no file storage. Mathematically, we cannot access your data even if compelled by law.",
+            
+            faqQ8: "Is the password mandatory?", 
+            faqA8: "No, it is optional. However, for sensitive data, we strongly recommend it to prevent interception by anyone on the same local network.",
+            
+            faqQ9: "I forgot the password. Can you reset it?", 
+            faqA9: "No. We do not store passwords. If you lose the password, the encrypted data cannot be recovered by anyone, including us.",
+            
             techPhrases: ["Generating RSA-4096 Key...", "Initializing WebRTC Handshake...", "Establishing P2P Tunnel...", "Synchronizing Peer Signals...", "Channel Secured!"]
         },
         zh: { 
@@ -535,56 +629,307 @@
             strengthLevels: ["极弱", "弱", "中等", "稍强", "强", "极强", "特别强"],
             faqTitle: "常见问题",
             
-            // AI Strings
             aiInsight: "🤖 AI 智能分析", aiLocal: "本地处理",
             aiTags: { img: "🖼️ 图像", vid: "🎬 视频", doc: "📄 文档", code: "💻 代码", zip: "📦 压缩包", big: "🐘 大文件" },
 
-            faqQ1: "文件会经过服务器吗？", faqA1: "不会。文件通过 P2P 直接在浏览器间传输，绝不存储在服务器上。",
-            faqQ2: "会记录日志吗？", faqA2: "不会。我们不记录 IP、日志或用户身份。",
-            faqQ3: "传输安全吗？", faqA3: "全程 WebRTC 加密传输，我们无法查看您的数据。",
-            faqQ4: "对方能看到我IP吗？", faqA4: "可能。P2P 直连需要 IP，介意请使用 VPN。",
-            faqQ5: "适合传机密文件吗？", faqA5: "适合。零知识架构非常安全。",
-            faqQ6: "关掉后能恢复吗？", faqA6: "不能。页面关闭即刻销毁。",
-            faqQ7: "你们能看到文件吗？", faqA7: "不能。技术上无法实现。",
-            faqQ8: "必须设密码吗？", faqA8: "不用。这是可选功能。",
-            faqQ9: "忘了密码咋办？", faqA9: "那文件就找不回来了，无法破解。",
-            techPhrases: ["正在生成密钥对...", "初始化 WebRTC 握手...", "建立加密隧道...", "同步点对点信号...", "通道已安全!"]
-        }
-        // ... (其他语言如 JP, KR, ES, HI 的 AI 字段我已逻辑兼容，默认回退英文)
-    };
+            /* 专业级 FAQ - Chinese */
+            faqQ1: "文件会经过你们的服务器吗？", 
+            faqA1: "不会。FlashDrop Pro 采用基于 WebRTC 的无服务器 P2P 架构。数据流直接在对等端之间传输。我们的信令服务器仅用于握手连接，绝不接触文件数据。",
+            
+            faqQ2: "你们会保留日志或元数据吗？", 
+            faqA2: "绝不。我们基于“零知识”原则运营。我们不存储 IP 地址、文件名或传输日志。一旦浏览器标签页关闭，所有痕迹都会从易失性内存中消失。",
+            
+            faqQ3: "使用了什么加密标准？", 
+            faqA3: "所有传输均通过 WebRTC 强制的 DTLS/SRTP 加密协议进行保护。如果您启用可选的密码保护，我们会在传输前应用额外的 AES-256-GCM 客户端加密。",
+            
+            faqQ4: "对方能看到我的 IP 地址吗？", 
+            faqA4: "由于 P2P 直连的特性，接收方设备必须知道您的 IP 才能建立链接。如果您介意这一点，建议配合 VPN 或 Tor 使用。",
+            
+            faqQ5: "传输机密文件安全吗？", 
+            faqA5: "非常安全。由于数据从未驻留在第三方服务器上，攻击面极小。非常适合法律、医疗或专有数据的传输。",
+            
+            faqQ6: "关闭页面后还能恢复文件吗？", 
+            faqA6: "不能。数据仅存在于您的浏览器 RAM（易失性内存）中。一旦会话结束或标签页关闭，数据将不可挽回地丢失。",
+            
+            faqQ7: "FlashDrop 员工能查看我的文件吗？", 
+            faqA7: "不可能。我们没有解密密钥，也不托管文件存储。从数学和技术上讲，即使受到法律强制，我们也无法访问您的数据。",
+            
+            faqQ8: "必须要设置密码吗？", 
+            faqA8: "不是，这是可选的。但对于敏感数据，我们强烈建议设置密码，以防止同一局域网内的中间人攻击。",
+            
+            faqQ9: "我忘了密码，能重置吗？", 
+            faqA9: "不能。我们不存储密码。如果您丢失了密码，加密数据将无法被任何人（包括我们）恢复。",
+            
+            techPhrases: ["正在生成 RSA-4096 密钥...", "初始化 WebRTC 握手...", "建立 P2P 加密隧道...", "同步对等信号...", "安全通道已建立!"]
+        },
+        ja: { 
+            tag: "JP",
+            tabSend: "送信", tabReceive: "受信", 
+            badges: ["🔒 P2P暗号化", "🕵️ ログなし", "⚡ 高速転送", "📂 自動消去"], 
+            drop: "ここにドロップ", fileLab: "クリックして選択", 
+            shareF: "ファイルを共有", shareT: "テキストを共有", 
+            connect: "ダウンロード", save: "📥 保存する", 
+            recv: "👀 テキスト表示", decryptRecv: "🔓 復号して表示", decryptSave: "🔓 復号して保存", saveNow: "💾 保存をクリック",
 
+            exp: "有効期限: ", copyLink: "📋 リンクをコピー", stop: "停止",
+            guide: "QRコードをスキャンするか、コードを入力してください。", 
+            coffee: "コーヒーを奢る", 
+            hPriv: "プライバシー", hSite: "サイトについて", hUs: "私たちについて",
+            inputErr: "6桁のコードを入力してください。", orScan: "QRスキャン 📷", 
+            doneRemind: "完了！上のボタンで保存してください。", 
+            histTitle: "最近の履歴", fileErr: "ファイルを選択してください。", textErr: "テキストを入力してください。",
+            passTitle: "🔐 パスワード入力", passPlaceholder: "ここに入力...", passUnlock: "解除", passCancel: "キャンセル",
+            passWrong: "❌ パスワードが違います！", passRemaining: "回試行可能。",
+            passWeak: "パスワードが弱すぎます！\n8文字以上で、以下を含めてください：\n- 大文字\n- 小文字\n- 数字\n- 記号",
+
+            step1: "ファイル選択<br><span style='font-size:9px; opacity:0.7'>(テキスト可)</span>", 
+            step2: "暗号化設定<br><span style='font-size:9px; opacity:0.7'>(任意)</span>", 
+            step3: "コード取得", 
+            step4: "ダウンロード",
+
+            heroTitle: "安全なファイル共有。私たちも見えません。",
+            heroSub: "P2P直接転送。AES-256暗号化オプション。サーバーなし。",
+            sig1: "無制限", sig2: "P2Pのみ", sig3: "自動消去",
+            modalTitle: "パスワード設定", btnEnable: "有効にする", btnCancel: "キャンセル",
+            aesOff: "AES-256 オフ", aesOn: "AES-256 オン", 
+            btnRuthless: "拒否する（今回のみ）",
+            strengthLevels: ["極弱", "弱", "普通", "やや強", "強", "極強", "最強"],
+            faqTitle: "よくある質問",
+            
+            aiInsight: "🤖 AI 分析", aiLocal: "ローカル処理",
+            aiTags: { img: "🖼️ 画像", vid: "🎬 動画", doc: "📄 文書", code: "💻 コード", zip: "📦 圧縮", big: "🐘 大容量" },
+
+            /* 专业级 FAQ - Japanese */
+            faqQ1: "ファイルはサーバーを経由しますか？", 
+            faqA1: "いいえ。FlashDrop ProはWebRTCによるサーバーレスP2Pアーキテクチャを採用しています。データはピア間で直接転送されます。",
+            faqQ2: "ログやメタデータは保存されますか？", 
+            faqA2: "絶対にありません。「ゼロ知識」ベースで運用しています。IPアドレスやログは一切保存しません。ブラウザを閉じると、揮発性メモリからすべて消去されます。",
+            faqQ3: "どのような暗号化標準を使用していますか？", 
+            faqA3: "すべての転送はWebRTCのDTLS/SRTP暗号化で保護されます。オプションのパスワードを有効にすると、送信前にAES-256-GCMによる追加の暗号化が適用されます。",
+            faqQ4: "IPアドレスは相手に見えますか？", 
+            faqA4: "P2P直接接続の性質上、リンク確立のためにIPが必要です。匿名性が必要な場合は、VPNやTorの使用を推奨します。",
+            faqQ5: "機密文書の転送は安全ですか？", 
+            faqA5: "はい。データが第三者のサーバーに保存されることはないため、攻撃リスクは極小です。法的・医療的なデータの転送に最適です。",
+            faqQ6: "タブを閉じた後に復元できますか？", 
+            faqA6: "いいえ。データはRAM（揮発性メモリ）にのみ存在します。セッション終了後は完全に消失し、復元不可能です。",
+            faqQ7: "運営スタッフはファイルを見ることができますか？", 
+            faqA7: "不可能です。私たちは復号鍵を持たず、ファイルストレージもホストしていません。技術的にアクセス不可能です。",
+            faqQ8: "パスワードは必須ですか？", 
+            faqA8: "いいえ、任意です。ただし、ローカルネットワーク内での傍受を防ぐため、機密データには強く推奨します。",
+            faqQ9: "パスワードを忘れました。リセットできますか？", 
+            faqA9: "いいえ。パスワードは保存していません。紛失した場合、暗号化されたデータは誰にも復元できません。",
+
+            techPhrases: ["RSA鍵を生成中...", "WebRTCハンドシェイク...", "P2Pトンネル確立中...", "信号を同期中...", "安全な接続完了!"]
+        },
+        ko: { 
+            tag: "KR",
+            tabSend: "보내기", tabReceive: "받기", 
+            badges: ["🔒 P2P 암호화", "🕵️ 로그 없음", "⚡ 고속 전송", "📂 자동 삭제"], 
+            drop: "여기에 드롭", fileLab: "파일 선택 / 클릭", 
+            shareF: "파일 공유", shareT: "텍스트 공유", 
+            connect: "다운로드", save: "📥 저장", 
+            recv: "👀 텍스트 보기", decryptRecv: "🔓 복호화 및 보기", decryptSave: "🔓 복호화 및 저장", saveNow: "💾 저장하려면 클릭",
+
+            exp: "만료: ", copyLink: "📋 링크 복사", stop: "중지",
+            guide: "QR 코드를 스캔하거나 코드를 입력하세요.", 
+            coffee: "커피 한 잔 후원", 
+            hPriv: "개인정보", hSite: "사이트 정보", hUs: "회사 소개",
+            inputErr: "6자리 코드를 입력하세요.", orScan: "스캔하기 📷", 
+            doneRemind: "완료! 위 버튼을 눌러 저장하세요.", 
+            histTitle: "최근 기록", fileErr: "파일을 먼저 선택하세요.", textErr: "텍스트를 먼저 입력하세요.",
+            passTitle: "🔐 비밀번호 입력", passPlaceholder: "여기에 입력...", passUnlock: "잠금 해제", passCancel: "취소",
+            passWrong: "❌ 비밀번호 오류!", passRemaining: "회 시도 가능.",
+            passWeak: "비밀번호가 너무 약합니다!\n8자 이상이어야 하며 다음을 포함해야 합니다:\n- 대문자\n- 소문자\n- 숫자\n- 특수 문자",
+
+            step1: "파일 선택<br><span style='font-size:9px; opacity:0.7'>(텍스트 가능)</span>", 
+            step2: "비번 설정<br><span style='font-size:9px; opacity:0.7'>(선택 사항)</span>", 
+            step3: "코드 받기", 
+            step4: "다운로드",
+
+            heroTitle: "안전한 파일 공유. 서버 저장 없음.",
+            heroSub: "직접 P2P 전송. 선택적 AES-256 암호화.",
+            sig1: "무제한", sig2: "P2P 전용", sig3: "자동 삭제",
+            modalTitle: "비밀번호 설정", btnEnable: "활성화", btnCancel: "취소",
+            aesOff: "AES-256 끄기", aesOn: "AES-256 켜기",
+            btnRuthless: "거절하기 (이번만)",
+            strengthLevels: ["매우 약함", "약함", "보통", "약간 강함", "강함", "매우 강함", "최강"],
+            faqTitle: "자주 묻는 질문",
+            
+            aiInsight: "🤖 AI 인사이트", aiLocal: "로컬 처리",
+            aiTags: { img: "🖼️ 이미지", vid: "🎬 동영상", doc: "📄 문서", code: "💻 코드", zip: "📦 압축", big: "🐘 대용량" },
+
+            /* 专业级 FAQ - Korean */
+            faqQ1: "파일이 서버를 통과하나요?", 
+            faqA1: "아니요. FlashDrop Pro는 WebRTC 기반의 서버리스 P2P 아키텍처를 사용합니다. 데이터는 피어 간에 직접 전송됩니다.",
+            faqQ2: "로그나 메타데이터를 보관하나요?", 
+            faqA2: "절대 아닙니다. 우리는 '제로 지식(Zero-Knowledge)' 기반으로 운영됩니다. IP 주소나 로그를 저장하지 않으며, 탭을 닫으면 휘발성 메모리에서 즉시 삭제됩니다.",
+            faqQ3: "어떤 암호화 표준을 사용하나요?", 
+            faqA3: "모든 전송은 WebRTC의 DTLS/SRTP 암호화로 보호됩니다. 비밀번호 옵션을 켜면 AES-256-GCM 클라이언트 암호화가 추가로 적용됩니다.",
+            faqQ4: "상대방이 제 IP를 볼 수 있나요?", 
+            faqA4: "P2P 직접 연결 특성상 링크 수립을 위해 IP가 필요합니다. 익명성이 중요하다면 VPN이나 Tor 사용을 권장합니다.",
+            faqQ5: "기밀 문서 전송에 안전한가요?", 
+            faqA5: "네. 데이터가 제3자 서버에 저장되지 않으므로 공격 가능성이 매우 낮습니다. 법적, 의료적 데이터 전송에 이상적입니다.",
+            faqQ6: "탭을 닫은 후 복구할 수 있나요?", 
+            faqA6: "아니요. 데이터는 브라우저의 RAM(휘발성 메모리)에만 존재합니다. 세션이 끝나면 데이터는 영구적으로 손실됩니다.",
+            faqQ7: "운영자가 파일을 볼 수 있나요?", 
+            faqA7: "불가능합니다. 우리는 복호화 키를 가지고 있지 않으며 파일 저장소를 호스팅하지 않습니다. 기술적으로 접근이 불가능합니다.",
+            faqQ8: "비밀번호는 필수인가요?", 
+            faqA8: "아니요, 선택 사항입니다. 하지만 로컬 네트워크에서의 가로채기를 방지하기 위해 중요 데이터에는 강력히 권장합니다.",
+            faqQ9: "비밀번호를 잊었습니다. 복구 가능한가요?", 
+            faqA9: "아니요. 우리는 비밀번호를 저장하지 않습니다. 분실 시 암호화된 데이터는 복구할 수 없습니다.",
+
+            techPhrases: ["RSA 키 생성 중...", "WebRTC 연결 중...", "P2P 터널 수립 중...", "동기화 중...", "보안 연결 완료!"]
+        },
+        es: { 
+            tag: "ES",
+            tabSend: "Enviar", tabReceive: "Recibir", 
+            badges: ["🔒 Cifrado P2P", "🕵️ Sin Registros", "⚡ Alta Velocidad", "📂 Auto-Borrado"], 
+            drop: "SOLTAR AQUÍ", fileLab: "Soltar / Clic", 
+            shareF: "COMPARTIR ARCHIVOS", shareT: "COMPARTIR TEXTO", 
+            connect: "DESCARGAR", save: "📥 GUARDAR", 
+            recv: "👀 VER TEXTO", decryptRecv: "🔓 DESCIFRAR Y VER", decryptSave: "🔓 DESCIFRAR Y GUARDAR", saveNow: "💾 CLIC PARA GUARDAR",
+
+            exp: "Expira: ", copyLink: "📋 COPIAR ENLACE", stop: "DETENER",
+            guide: "Escanea el QR o introduce el código.", 
+            coffee: "invítame un café", 
+            hPriv: "Privacidad", hSite: "Sobre el sitio", hUs: "Sobre nosotros",
+            inputErr: "Introduce el código de 6 dígitos.", orScan: "o escanear 📷", 
+            doneRemind: "¡HECHO! Clic arriba para guardar.", 
+            histTitle: "Historial Reciente", fileErr: "Selecciona archivos primero.", textErr: "Introduce texto primero.",
+            passTitle: "🔐 Contraseña", passPlaceholder: "Escribe aquí...", passUnlock: "DESBLOQUEAR", passCancel: "CANCELAR",
+            passWrong: "❌ Contraseña incorrecta", passRemaining: "intentos restantes.",
+            passWeak: "¡Contraseña muy débil!\nDebe tener 8+ caracteres e incluir:\n- Mayúsculas\n- Minúsculas\n- Números\n- Símbolos",
+
+            step1: "Elegir Archivos<br><span style='font-size:9px; opacity:0.7'>(o Texto)</span>", 
+            step2: "Cifrado AES<br><span style='font-size:9px; opacity:0.7'>(Opcional)</span>", 
+            step3: "Obtener Código", 
+            step4: "Descargar",
+
+            heroTitle: "Intercambio seguro. Nadie nos ve.",
+            heroSub: "Transferencia P2P directa. Cifrado AES-256 opcional.",
+            sig1: "Sin Límites", sig2: "Solo P2P", sig3: "Auto-Borrado",
+            modalTitle: "Contraseña", btnEnable: "ACTIVAR", btnCancel: "CANCELAR",
+            aesOff: "AES-256 OFF", aesOn: "AES-256 ON", 
+            btnRuthless: "Rechazar (Solo esta vez)",
+            strengthLevels: ["Muy débil", "Débil", "Media", "Moderada", "Fuerte", "Muy fuerte", "Imbatible"],
+            faqTitle: "Preguntas Frecuentes",
+            
+            aiInsight: "🤖 Análisis IA", aiLocal: "Procesamiento Local",
+            aiTags: { img: "🖼️ Imagen", vid: "🎬 Video", doc: "📄 Documento", code: "💻 Código", zip: "📦 Archivo", big: "🐘 Grande" },
+
+            /* 专业级 FAQ - Spanish */
+            faqQ1: "¿Mis archivos pasan por sus servidores?", 
+            faqA1: "No. FlashDrop Pro utiliza una arquitectura P2P sin servidor basada en WebRTC. Los datos fluyen directamente entre pares.",
+            faqQ2: "¿Guardan registros o metadatos?", 
+            faqA2: "Absolutamente no. Operamos bajo una base de 'Conocimiento Cero'. No almacenamos IPs ni registros. Al cerrar la pestaña, todo desaparece de la memoria volátil.",
+            faqQ3: "¿Qué estándares de cifrado utilizan?", 
+            faqA3: "Todas las transferencias están protegidas por el cifrado DTLS/SRTP de WebRTC. Si activa la contraseña, aplicamos una capa adicional AES-256-GCM.",
+            faqQ4: "¿Es visible mi dirección IP?", 
+            faqA4: "Debido a la conexión directa P2P, el receptor necesita su IP para vincularse. Si le preocupa, use una VPN o Tor.",
+            faqQ5: "¿Es seguro para documentos confidenciales?", 
+            faqA5: "Sí. Como los datos nunca descansan en un servidor de terceros, la superficie de ataque es mínima. Ideal para datos legales o médicos.",
+            faqQ6: "¿Puedo recuperar archivos después?", 
+            faqA6: "No. Los datos existen solo en la RAM (memoria volátil). Una vez finalizada la sesión, se pierden irremediablemente.",
+            faqQ7: "¿El personal puede ver mis archivos?", 
+            faqA7: "Imposible. No poseemos claves de descifrado ni alojamiento de archivos. Matemáticamente no podemos acceder a sus datos.",
+            faqQ8: "¿La contraseña es obligatoria?", 
+            faqA8: "No, es opcional. Sin embargo, se recomienda encarecidamente para datos sensibles para evitar interceptaciones en redes locales.",
+            faqQ9: "¿Olvidé la contraseña. Pueden restablecerla?", 
+            faqA9: "No. No almacenamos contraseñas. Si la pierde, los datos cifrados no se pueden recuperar.",
+
+            techPhrases: ["Generando Clave RSA...", "Iniciando WebRTC...", "Túnel P2P...", "Sincronizando...", "¡Canal Seguro!"]
+        },
+        hi: { 
+            tag: "HI",
+            tabSend: "भेजें", tabReceive: "प्राप्त करें", 
+            badges: ["🔒 P2P एन्क्रिप्शन", "🕵️ कोई लॉग नहीं", "⚡ तीव्र गति", "📂 ऑटो-वाइप"], 
+            drop: "यहाँ छोड़ें", fileLab: "चुनें / क्लिक करें", 
+            shareF: "फ़ाइलें साझा करें", shareT: "텍스트 साझा करें", 
+            connect: "डाउनलोड", save: "📥 सहेजें", 
+            recv: "👀 टेक्स्ट देखें", decryptRecv: "🔓 डिक्रिप्ट करें और देखें", decryptSave: "🔓 डिक्रिप्ट करें और सहेजें", saveNow: "💾 सहेजने के लिए क्लिक करें",
+
+            exp: "समाप्त: ", copyLink: "📋 लिंक कॉपी करें", stop: "रोकें",
+            guide: "QR स्कैन करें या कोड दर्ज करें।", 
+            coffee: "मुझे कॉफी पिलाएं", 
+            hPriv: "गोपनीयता", hSite: "साइट के बारे में", hUs: "हमारे बारे में",
+            inputErr: "6-अंकीय कोड दर्ज करें।", orScan: "स्कैन करें 📷", 
+            doneRemind: "पूर्ण! सहेजें पर क्लिक करें।", 
+            histTitle: "हाल का इतिहास", fileErr: "कृपया पहले फ़ाइलें चुनें।", textErr: "कृपया पहले टेक्स्ट दर्ज करें।",
+            passTitle: "🔐 पासवर्ड दर्ज करें", passPlaceholder: "यहाँ टाइप करें...", passUnlock: "अनलॉक", passCancel: "रद्द करें",
+            passWrong: "❌ गलत पासवर्ड!", passRemaining: "प्रयास शेष।",
+            passWeak: "पासवर्ड बहुत कमजोर है!\nकम से कम 8 वर्ण और इसमें शामिल होने चाहिए:\n- अपरकेस\n- लोअरकेस\n- नंबर\n- सिंबल",
+
+            step1: "फ़ाइलें चुनें<br><span style='font-size:9px; opacity:0.7'>(टेक्स्ट लिखें)</span>", 
+            step2: "पासवर्ड सेट करें<br><span style='font-size:9px; opacity:0.7'>(वैकल्पिक)</span>", 
+            step3: "कोड प्राप्त करें", 
+            step4: "डाउनलोड",
+
+            heroTitle: "सुरक्षित फ़ाइल शेयरिंग, हम भी नहीं देख सकते।",
+            heroSub: "सीधा P2P स्थानांतरण। वैकल्पिक AES-256 एन्क्रिप्शन।",
+            sig1: "कोई सीमा नहीं", sig2: "केवल P2P", sig3: "ऑटो-वाइप",
+            modalTitle: "पासवर्ड सेट करें", btnEnable: "सक्षम करें", btnCancel: "रद्द करें",
+            aesOff: "AES-256 बंद", aesOn: "AES-256 चालू",
+            btnRuthless: "अस्वीकार करें (केवल इस बार)",
+            strengthLevels: ["बहुत कमजोर", "कमजोर", "मध्यम", "थोड़ा मजबूत", "मजबूत", "बहुत मजबूत", "अटूट"],
+            faqTitle: "सामान्य प्रश्न",
+            
+            aiInsight: "🤖 AI अंतर्दृष्टि", aiLocal: "स्थानीय प्रसंस्करण",
+            aiTags: { img: "🖼️ चित्र", vid: "🎬 वीडियो", doc: "📄 दस्तावेज़", code: "💻 कोड", zip: "📦 संग्रह", big: "🐘 बड़ी फ़ाइल" },
+
+            /* 专业级 FAQ - Hindi */
+            faqQ1: "क्या मेरी फ़ाइलें आपके सर्वर से गुजरती हैं?", 
+            faqA1: "नहीं। FlashDrop Pro WebRTC द्वारा संचालित सर्वरलेस P2P आर्किटेक्चर का उपयोग करता है। डेटा सीधे साथियों के बीच प्रवाहित होता है।",
+            faqQ2: "क्या आप कोई लॉग रखते हैं?", 
+            faqA2: "बिल्कुल नहीं। हम 'जीरो-नॉलेज' के आधार पर काम करते हैं। हम आईपी पते या लॉग संग्रहीत नहीं करते हैं। टैब बंद होने पर सब मिट जाता है।",
+            faqQ3: "कौन से एन्क्रिप्शन मानकों का उपयोग किया जाता है?", 
+            faqA3: "सभी स्थानान्तरण WebRTC के DTLS/SRTP एन्क्रिप्शन के माध्यम से सुरक्षित हैं। यदि आप पासवर्ड सक्षम करते हैं, तो हम AES-256-GCM भी लागू करते हैं।",
+            faqQ4: "क्या मेरा आईपी पता दिखाई देता है?", 
+            faqA4: "सीधे P2P कनेक्शन की प्रकृति के कारण, लिंक स्थापित करने के लिए प्राप्तकर्ता को आपके आईपी की आवश्यकता होती है। यदि गोपनीयता चिंता है, तो VPN का उपयोग करें।",
+            faqQ5: "क्या यह गोपनीय दस्तावेजों के लिए सुरक्षित है?", 
+            faqA5: "हाँ। चूँकि डेटा कभी भी किसी तीसरे पक्ष के सर्वर पर नहीं रहता है, इसलिए जोखिम कम से कम है। यह कानूनी या चिकित्सा डेटा के लिए आदर्श है।",
+            faqQ6: "क्या मैं बाद में फ़ाइलें पुनर्प्राप्त कर सकता हूँ?", 
+            faqA6: "नहीं। डेटा केवल आपके ब्राउज़र की रैम (अस्थायी मेमोरी) में मौजूद होता है। सत्र समाप्त होने पर डेटा हमेशा के लिए खो जाता है।",
+            faqQ7: "क्या कर्मचारी मेरी फ़ाइलें देख सकते हैं?", 
+            faqA7: "असंभव। हमारे पास कोई डिक्रिप्शन कुंजी नहीं है और हम कोई फ़ाइल स्टोरेज होस्ट नहीं करते हैं। हम तकनीकी रूप से आपके डेटा तक नहीं पहुँच सकते।",
+            faqQ8: "क्या पासवर्ड अनिवार्य है?", 
+            faqA8: "नहीं, यह वैकल्पिक है। हालाँकि, स्थानीय नेटवर्क पर अवरोधन को रोकने के लिए संवेदनशील डेटा के लिए इसकी दृढ़ता से अनुशंसा की जाती है।",
+            faqQ9: "मैं पासवर्ड भूल गया। क्या आप इसे रीसेट कर सकते हैं?", 
+            faqA9: "नहीं। हम पासवर्ड स्टोर नहीं करते हैं। यदि आप इसे खो देते हैं, तो एन्क्रिप्टेड डेटा पुनर्प्राप्त नहीं किया जा सकता है।",
+
+            techPhrases: ["RSA कुंजी बना रहा है...", "WebRTC शुरू हो रहा है...", "P2P टनल...", "सिंक्रनाइज़ हो रहा है...", "चैनल सुरक्षित!"]
+        }
+    };
     let currLang = "en", peer = null, stagedFiles = [], currentDownloads = 0, videoTrack = null, torchOn = false, activeConn = null, expiryTimerIdx = null;
     let isAdBlockIgnored = false; 
     let downloadDotsIdx = null; 
     const PREFIX = "fd-pro-";
-    // [重要优化] 分片大小设为 64KB，既保证速度又防止浏览器卡死
+    // 分片大小 64KB，平衡速度与浏览器内存压力
     const CHUNK_SIZE = 64 * 1024; 
 
-    /* --- [AI 引擎模块] --- */
+    /* --- [AI 引擎模块：实时分析与联动] --- */
     const AIEngine = {
         analyze(files) {
             const tags = new Set();
-            let totalSize = 0;
+            if (!files || files.length === 0) return []; // 空列表直接返回空
+
             const exts = {
-                img: ['jpg','jpeg','png','gif','webp','svg'],
-                vid: ['mp4','mov','avi','mkv','webm'],
-                doc: ['pdf','doc','docx','xls','txt','md'],
-                code: ['html','css','js','py','c','cpp','json'],
-                zip: ['zip','rar','7z','tar','gz']
+                img: ['jpg','jpeg','png','gif','webp','svg','bmp','tiff'],
+                vid: ['mp4','mov','avi','mkv','webm','3gp','m4v'],
+                doc: ['pdf','doc','docx','xls','xlsx','txt','md','ppt','pptx','csv'],
+                code: ['html','css','js','py','c','cpp','json','java','rb','php','sql','go','ts'],
+                zip: ['zip','rar','7z','tar','gz','iso','dmg','pkg']
             };
 
             Array.from(files).forEach(f => {
-                totalSize += f.size;
                 const ext = f.name.split('.').pop().toLowerCase();
                 
-                // 启发式识别
                 if(exts.img.includes(ext)) tags.add('img');
                 else if(exts.vid.includes(ext)) tags.add('vid');
                 else if(exts.doc.includes(ext)) tags.add('doc');
                 else if(exts.code.includes(ext)) tags.add('code');
                 else if(exts.zip.includes(ext)) tags.add('zip');
                 
-                if(f.size > 100 * 1024 * 1024) tags.add('big'); // >100MB
+                if(f.size > 100 * 1024 * 1024) tags.add('big'); // >100MB 标记为大文件
             });
 
             return Array.from(tags);
@@ -592,7 +937,12 @@
         renderTags(tags) {
             const container = document.getElementById('ai-tag-container');
             const wrapper = document.getElementById('ai-suggestions');
-            if(tags.length === 0) { wrapper.style.display = 'none'; return; }
+            
+            // 如果没有标签（即没有文件），隐藏 AI 区域
+            if(tags.length === 0) { 
+                wrapper.style.display = 'none'; 
+                return; 
+            }
             
             wrapper.style.display = 'block';
             const dict = I18N[currLang].aiTags || I18N['en'].aiTags;
@@ -607,7 +957,6 @@
         const tagEl = document.getElementById('currentLangTag');
         if(tagEl) tagEl.innerText = d.tag;
         
-        // 批量替换文本
         const map = {
             'tab-send': d.tabSend, 'tab-receive': d.tabReceive,
             'drop-text': d.drop, 'label-files': d.fileLab,
@@ -622,7 +971,8 @@
             'modal-pass-title': d.modalTitle, 'btn-enable-pass': d.btnEnable, 'btn-cancel-pass': d.btnCancel,
             'aes-off-txt': d.aesOff, 'aes-on-txt': d.aesOn, 
             'btn-ruthless-text': d.btnRuthless, 'faq-title': d.faqTitle,
-            'pass-input-title': d.passTitle, 'btn-pass-confirm': d.passUnlock, 'btn-pass-cancel': d.passCancel
+            'pass-input-title': d.passTitle, 'btn-pass-confirm': d.passUnlock, 'btn-pass-cancel': d.passCancel,
+            'ai-insight-title': d.aiInsight, 'ai-local-badge': d.aiLocal
         };
         for (const [id, text] of Object.entries(map)) {
             const el = document.getElementById(id);
@@ -633,7 +983,7 @@
         }
         document.getElementById('alert-password-input').placeholder = d.passPlaceholder;
         
-        // FAQ
+        // 填充 FAQ
         for(let i=1; i<=9; i++) {
              const q = document.getElementById(`faq-q${i}`); const a = document.getElementById(`faq-a${i}`);
              if(q && d[`faqQ${i}`]) q.innerText = d[`faqQ${i}`];
@@ -756,17 +1106,100 @@
     }
     function updateLockUI() { document.getElementById('protection-toggle-input').checked = isEncrypted; }
     
-    // 更新 handleFiles 触发 AI 分析
+    // [修改] handleFiles 现在只负责添加，渲染逻辑统一走 renderStagedList
     function handleFiles(files) { 
         stagedFiles = stagedFiles.concat(Array.from(files)); 
         renderStagedList(); 
-        // 触发 AI 分析
-        const aiTags = AIEngine.analyze(stagedFiles);
-        AIEngine.renderTags(aiTags);
     }
-    function renderStagedList() { const list = document.getElementById('stagedList'); list.style.display = stagedFiles.length ? 'block' : 'none'; list.innerHTML = stagedFiles.map((f, i) => `<div class="staged-item"><span>📄 ${f.name.length > 15 ? f.name.substring(0,12)+'...' : f.name}</span><span style="color:var(--danger); cursor:pointer; font-weight:bold; padding:0 5px;" onclick="stagedFiles.splice(${i},1);renderStagedList()">✕</span></div>`).join(''); }
 
-    /* --- [核心逻辑：发送端 (含背压控制)] --- */
+    // 根据后缀返回图标
+    function getFileIcon(name) {
+        const ext = name.split('.').pop().toLowerCase();
+        if (['jpg','jpeg','png','gif','webp','svg','bmp'].includes(ext)) return '🖼️';
+        if (['mp4','mov','avi','mkv','webm','3gp'].includes(ext)) return '🎬';
+        if (['mp3','wav','ogg','flac','m4a'].includes(ext)) return '🎵';
+        if (['zip','rar','7z','tar','gz','iso','dmg'].includes(ext)) return '📦';
+        if (['html','css','js','py','c','cpp','json','java'].includes(ext)) return '💻';
+        if (['pdf','doc','docx','xls','xlsx','ppt','txt'].includes(ext)) return '📄';
+        return '📁'; 
+    }
+
+    /* [核心修改] 渲染列表时，同时刷新 AI 分析结果 */
+    function renderStagedList() { 
+        const list = document.getElementById('stagedList'); 
+        
+        if (stagedFiles.length === 0) {
+            list.style.display = 'none';
+            document.getElementById('file-count-badge').style.display = 'none';
+            // 如果没文件了，AI 区域也清空
+            AIEngine.renderTags([]); 
+        } else {
+            list.style.display = 'block';
+            
+            // 更新文件计数器
+            const badge = document.getElementById('file-count-badge');
+            badge.style.display = 'block';
+            badge.innerText = `${stagedFiles.length} File${stagedFiles.length > 1 ? 's' : ''}`;
+
+            list.innerHTML = stagedFiles.map((f, i) => 
+                `<div class="staged-item"><span>${getFileIcon(f.name)} ${f.name.length > 15 ? f.name.substring(0,12)+'...' : f.name}</span><span style="color:var(--danger); cursor:pointer; font-weight:bold; padding:0 5px;" onclick="stagedFiles.splice(${i},1);renderStagedList()">✕</span></div>`
+            ).join('');
+
+            // 触发 AI 分析
+            const aiTags = AIEngine.analyze(stagedFiles);
+            AIEngine.renderTags(aiTags);
+        }
+    }
+
+    // 实时文字计数器
+    function updateTextCount(el) {
+        const len = el.value.length;
+        const badge = document.getElementById('text-count-badge');
+        if(len > 0) {
+            badge.style.display = 'block';
+            badge.innerText = `${len} Char${len > 1 ? 's' : ''}`;
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    /* [核心功能] 极速打字机特效 + 自动滚屏 + 实时计数 */
+    function typeWriterEffect(element, text) {
+        element.innerText = "";
+        let i = 0;
+        const badge = document.getElementById('recv-text-count');
+        const scrollBox = document.getElementById('recv-scroll-box'); 
+        
+        if(badge) badge.style.display = 'block';
+
+        // 速度优化：文本越长，每帧输出字符越多，保证在大段文字时无需久等
+        // 基础速度：每帧最少 1 个字；如果字数>100，每帧出 length/50 个字
+        const step = Math.max(1, Math.floor(text.length / 50)); 
+
+        function type() {
+            if (i < text.length) {
+                const chunk = text.slice(i, i + step);
+                element.innerText += chunk;
+                i += step;
+                
+                // 更新计数器
+                if(badge) badge.innerText = Math.min(i, text.length) + " Chars";
+                
+                // 自动滚屏到底部
+                if(scrollBox) scrollBox.scrollTop = scrollBox.scrollHeight;
+                
+                requestAnimationFrame(type);
+            } else {
+                // 结束时修正
+                element.innerText = text;
+                if(badge) badge.innerText = text.length + " Chars";
+                if(scrollBox) scrollBox.scrollTop = scrollBox.scrollHeight;
+            }
+        }
+        type();
+    }
+
+    /* --- 发送端逻辑 --- */
     async function initSender() {
         if(peer) peer.destroy(); currentDownloads = 0; const code = Math.floor(100000 + Math.random() * 900000);
         peer = new Peer(PREFIX + code);
@@ -786,37 +1219,28 @@
             c.on('open', async () => {
                 let textValue = document.getElementById('quickText').value.trim(); 
                 
-                // 1. 发送文本
+                // 发送文字
                 if(textValue) {
                     if(isEncrypted) { const encryptedTextBlob = await FlashDropCrypto.encrypt(new Blob([textValue]), aesKey); const reader = new FileReader(); reader.onload = () => c.send({ type: 'text', data: reader.result, encrypted: true }); reader.readAsDataURL(encryptedTextBlob); } 
                     else { c.send({ type: 'text', data: textValue, encrypted: false }); }
                     addHistory("Sent: Text", "text");
                 }
 
-                // 2. 发送文件 (核心修复：加入流式控制)
+                // 发送文件 (带背压控制)
                 if(stagedFiles && stagedFiles.length > 0) {
                     let fb, fn = stagedFiles.length === 1 ? stagedFiles[0].name : "Bundle.zip";
-                    
-                    // 打包
                     if (stagedFiles.length === 1) { fb = stagedFiles[0]; } 
                     else { const zip = new JSZip(); stagedFiles.forEach(f => zip.file(f.name, f)); fb = await zip.generateAsync({type: "blob"}); }
                     
-                    // 加密
                     if(isEncrypted) { fb = await FlashDropCrypto.encrypt(fb, aesKey); fn += ".enc"; }
                     
-                    // 发送元数据
                     c.send({ type: 'meta', name: fn, size: fb.size, encrypted: isEncrypted });
 
-                    // [Backpressure Fix] 分片发送循环
                     const arrayBuffer = await fb.arrayBuffer();
                     for (let i = 0; i < fb.size; i += CHUNK_SIZE) {
-                        // 检查缓冲区：如果积压超过 1MB，就等待 (防止浏览器崩溃)
-                        while (c.bufferSize > 1024 * 1024) {
-                            await new Promise(r => setTimeout(r, 50));
-                        }
-                        
-                        const chunkData = arrayBuffer.slice(i, i + CHUNK_SIZE);
-                        c.send({ type: 'chunk', index: i/CHUNK_SIZE, data: chunkData });
+                        // 如果缓冲区满，暂停发送，防止崩溃
+                        while (c.bufferSize > 1024 * 1024) { await new Promise(r => setTimeout(r, 50)); }
+                        c.send({ type: 'chunk', index: i/CHUNK_SIZE, data: arrayBuffer.slice(i, i + CHUNK_SIZE) });
                     }
                     c.send({ type: 'done' }); 
                     addHistory("Sent: " + fn, "file");
@@ -825,7 +1249,7 @@
         });
     }
 
-    /* --- [核心逻辑：接收端] --- */
+    /* --- 接收端逻辑 --- */
     function startReceiving() {
         const code = document.getElementById('targetCode').value;
         const rPeer = new Peer();
@@ -842,7 +1266,7 @@
             let meta = null, chunks = [], totalRecv = 0, startTime = Date.now(), lastUpdate = 0;
             
             conn.on('data', async d => {
-                // 处理文本
+                // 接收文字
                 if(d.type === 'text') {
                     if(downloadDotsIdx) clearInterval(downloadDotsIdx);
                     const label = d.encrypted ? I18N[currLang].decryptRecv : I18N[currLang].recv;
@@ -873,15 +1297,19 @@
                                 }
                             }
                         }
-                        document.getElementById('receivedText').innerText = finalTxt;
+                        
+                        // 显示文字（带打字机特效）
+                        const textBox = document.getElementById('receivedText');
                         document.getElementById('receivedText-container').style.display = 'block';
+                        typeWriterEffect(textBox, finalTxt);
+
                         pgBar.style.width = '100%';
                         btn.onclick = () => triggerAd('receive');
                         btn.innerText = I18N[currLang].connect; btn.style.background = "var(--primary)";
                         if (conn && conn.open) { conn.send({ type: 'confirm_save' }); }
                     };
                 }
-                // 处理文件元数据
+                // 接收文件元数据
                 else if(d.type === 'meta') { 
                     meta = d; startTime = Date.now(); 
                     const stats = document.getElementById('receiveNerdStats'); stats.style.display = 'flex';
@@ -889,11 +1317,10 @@
                     const warnText = warnTextMap[currLang] || warnTextMap.en;
                     stats.innerHTML = `<span id="nerd-speed">0.0 MB/s</span><span class="blink-warn">${warnText}</span><span id="nerd-eta" style="color:var(--primary)">ETA: --s</span>`;
                 }
-                // 处理文件分片
+                // 接收文件分片
                 else if(d.type === 'chunk') { 
-                    chunks.push(d.data); // 简单存入数组，最后合并
+                    chunks.push(d.data); 
                     totalRecv += d.data.byteLength;
-                    
                     if(meta) {
                         pgBar.style.width = (totalRecv / meta.size * 100) + '%';
                         const now = Date.now();
@@ -909,7 +1336,7 @@
                         }
                     }
                 }
-                // 处理完成
+                // 接收完成
                 else if(d.type === 'done') {
                     if(downloadDotsIdx) clearInterval(downloadDotsIdx);
                     
@@ -920,7 +1347,7 @@
                     const stats = document.getElementById('receiveNerdStats');
                     if(stats) stats.innerHTML = `<span style="color:var(--success); width:100%; text-align:center;">✅ TRANSFER COMPLETE</span>`;
                     pgBar.style.width = '100%';
-                    let finalBlob = new Blob(chunks); // 合并所有分片
+                    let finalBlob = new Blob(chunks);
 
                     btn.onclick = async () => {
                         if (meta && meta.encrypted) {
@@ -943,7 +1370,6 @@
                                         setTimeout(() => { resetReceiver(); rPeer.destroy(); }, 1000);
                                     };
                                     return;
-
                                 } catch (e) {
                                     attempts++;
                                     if(attempts >= 3) { 
@@ -983,6 +1409,11 @@
         showCustomAlert("Copied!"); 
         document.getElementById('receivedText').innerText = "";
         document.getElementById('receivedText-container').style.display = 'none';
+        
+        // 重置计数器
+        const badge = document.getElementById('recv-text-count');
+        if(badge) badge.style.display = 'none';
+
         if(activeConn && activeConn.open) { activeConn.send({ type: 'confirm_save' }); }
         resetReceiver(); 
     }
@@ -1008,9 +1439,10 @@
         document.getElementById('senderCodeArea').style.display = 'none'; 
         stagedFiles = []; 
         renderStagedList(); 
-        document.getElementById('ai-suggestions').style.display = 'none'; // 重置 AI 标签
+        document.getElementById('ai-suggestions').style.display = 'none';
         const quickText = document.getElementById('quickText');
-        quickText.value = ""; quickText.blur(); 
+        quickText.value = ""; quickText.blur();
+        updateTextCount(quickText);
         if(expiryTimerIdx) clearInterval(expiryTimerIdx); 
         window.scrollTo({ top: 0, behavior: 'smooth' }); 
         setTimeout(() => window.scrollTo(0,0), 300);
@@ -1028,6 +1460,9 @@
         document.getElementById('receive-pg-container').style.display = 'none'; 
         document.getElementById('receiveNerdStats').style.display = 'none'; 
         document.getElementById('receivedText-container').style.display = 'none'; 
+        const badge = document.getElementById('recv-text-count');
+        if(badge) badge.style.display = 'none';
+        
         activeConn = null; 
     }
     function switchTab(m, e) { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.panel').forEach(p => p.classList.remove('active')); e.target.classList.add('active'); document.getElementById(`panel-${m}`).classList.add('active'); }
