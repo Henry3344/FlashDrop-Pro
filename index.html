@@ -367,6 +367,8 @@
                                     <div class="pwd-toggle" onclick="togglePwd('crypto-password', this)">🙈</div>
                                 </div>
                                 
+                                <p id="send-hash-hint" style="font-size:10px; color:#94a3b8; margin: 8px 0 2px 0; text-align:center; line-height:1.4; opacity:0.8;"></p>
+                                
                                 <div id="send-fingerprint" style="text-align: center; font-size: 24px; letter-spacing: 8px; margin: 5px 0; min-height: 36px; filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));"></div>
 
                                 <div class="strength-wrapper">
@@ -517,6 +519,8 @@
             <div class="pwd-toggle" onclick="togglePwd('alert-password-input', this)">🙈</div>
         </div>
 
+        <p id="recv-hash-hint" style="font-size:10px; color:#94a3b8; margin: 8px 0 2px 0; text-align:center; line-height:1.4; opacity:0.8;"></p>
+
         <div id="recv-fingerprint" style="text-align: center; font-size: 24px; letter-spacing: 8px; margin: 5px 0; min-height: 36px; filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.5));"></div>
 
         <div style="display: flex; gap: 10px; margin-top: 10px;">
@@ -569,7 +573,7 @@
         el.innerText = res;
     }
 
-    /* --- [多语言配置中心] --- */
+    /* --- [多语言配置中心：AI图标已更新为✨，密码提示已优化] --- */
     const I18N = {
         en: { 
             tag: "EN", 
@@ -590,9 +594,11 @@
             
             passTitle: "🔐 Enter Password", passPlaceholder: "Type password...", passUnlock: "UNLOCK", passCancel: "CANCEL",
             passWrong: "Wrong Password!", passRemaining: "attempts left",
+            passWeak: "For safety: 8+ chars, 1 Upper, 1 Lower, 1 Number, 1 Symbol.",
             
-            /* 英语温馨提示 */
-            passWeak: "For your file/text safety, please set a password of at least 8 characters, containing:\n- 1 Uppercase\n- 1 Lowercase\n- 1 Number\n- 1 Symbol",
+            /* [新增] 指纹提示语 - 英语 */
+            hashHintSend: "Visual Check: If receiver's emojis match these, the key is correct!",
+            hashHintRecv: "Visual Check: If the key matches, the emojis will match!",
             
             step1: "Select Files<br><span style='font-size:9px; opacity:0.7'>(Type Text)</span>", 
             step2: "Set AES-256<br><span style='font-size:9px; opacity:0.7'>(Option)</span>", 
@@ -642,9 +648,11 @@
             
             passTitle: "🔐 输入密码", passPlaceholder: "在此输入...", passUnlock: "解锁", passCancel: "取消",
             passWrong: "❌ 密码错误！", passRemaining: "次尝试机会。",
+            passWeak: "为了安全：至少8位，需包含大写、小写、数字及符号。",
             
-            /* 中文温馨提示 */
-            passWeak: "为了您的文件/文字安全，请至少设置8位数密码，并确保包含：\n- 1位大写字母\n- 1位小写字母\n- 1位数字\n- 1位标点符号",
+            /* [新增] 指纹提示语 - 中文 */
+            hashHintSend: "AES-256密钥设置好后，只要接收方的emoji与下方的emoji相符即为密钥正确！",
+            hashHintRecv: "只要输入的AES-256密钥一致，emoji就会一致！",
 
             step1: "选文件<br><span style='font-size:9px; opacity:0.7'>(可输文字)</span>", 
             step2: "设密码<br><span style='font-size:9px; opacity:0.7'>(可选加密)</span>", 
@@ -693,9 +701,11 @@
             histTitle: "最近の履歴", fileErr: "ファイルを選択してください。", textErr: "テキストを入力してください。",
             passTitle: "🔐 パスワード入力", passPlaceholder: "ここに入力...", passUnlock: "解除", passCancel: "キャンセル",
             passWrong: "❌ パスワードが違います！", passRemaining: "回試行可能。",
+            passWeak: "安全のため：8文字以上、大文字・小文字・数字・記号を含めてください。",
             
-            /* 日语温馨提示 */
-            passWeak: "安全のため、8文字以上で以下を含めて設定してください：\n- 大文字1つ\n- 小文字1つ\n- 数字1つ\n- 記号1つ",
+            /* [新增] 指纹提示语 - 日语 */
+            hashHintSend: "設定後、受信側の絵文字と一致していればキーは正しいです！",
+            hashHintRecv: "入力したキーが一致すれば、絵文字も一致します！",
 
             step1: "ファイル選択<br><span style='font-size:9px; opacity:0.7'>(テキスト可)</span>", 
             step2: "暗号化設定<br><span style='font-size:9px; opacity:0.7'>(任意)</span>", 
@@ -744,9 +754,11 @@
             histTitle: "최근 기록", fileErr: "파일을 먼저 선택하세요.", textErr: "텍스트를 먼저 입력하세요.",
             passTitle: "🔐 비밀번호 입력", passPlaceholder: "여기에 입력...", passUnlock: "잠금 해제", passCancel: "취소",
             passWrong: "❌ 비밀번호 오류!", passRemaining: "회 시도 가능.",
+            passWeak: "보안을 위해: 8자 이상, 대문자, 소문자, 숫자, 특수문자 포함.",
             
-            /* 韩语温馨提示 */
-            passWeak: "파일/텍스트 보안을 위해 8자 이상, 다음을 포함해 주세요:\n- 대문자 1개\n- 소문자 1개\n- 숫자 1개\n- 특수문자 1개",
+            /* [新增] 指纹提示语 - 韩语 */
+            hashHintSend: "설정 후 수신자의 이모티콘과 일치하면 키가 올바른 것입니다!",
+            hashHintRecv: "입력한 키가 일치하면 이모티콘도 일치합니다!",
 
             step1: "파일 선택<br><span style='font-size:9px; opacity:0.7'>(텍스트 가능)</span>", 
             step2: "비번 설정<br><span style='font-size:9px; opacity:0.7'>(선택 사항)</span>", 
@@ -795,9 +807,11 @@
             histTitle: "Historial Reciente", fileErr: "Selecciona archivos primero.", textErr: "Introduce texto primero.",
             passTitle: "🔐 Contraseña", passPlaceholder: "Escribe aquí...", passUnlock: "DESBLOQUEAR", passCancel: "CANCELAR",
             passWrong: "❌ Contraseña incorrecta", passRemaining: "intentos restantes.",
+            passWeak: "Seguridad: 8+ caracteres, 1 Mayúscula, 1 Minúscula, 1 Número, 1 Símbolo.",
             
-            /* 西班牙语温馨提示 */
-            passWeak: "Para su seguridad, use al menos 8 caracteres con:\n- 1 Mayúscula\n- 1 Minúscula\n- 1 Número\n- 1 Símbolo",
+            /* [新增] 指纹提示语 - 西班牙语 */
+            hashHintSend: "¡Si los emojis coinciden con los del receptor, la clave es correcta!",
+            hashHintRecv: "¡Si la clave coincide, los emojis también coincidirán!",
 
             step1: "Elegir Archivos<br><span style='font-size:9px; opacity:0.7'>(o Texto)</span>", 
             step2: "Cifrado AES<br><span style='font-size:9px; opacity:0.7'>(Opcional)</span>", 
@@ -846,9 +860,11 @@
             histTitle: "हाल का इतिहास", fileErr: "कृपया पहले फ़ाइलें चुनें।", textErr: "कृपया पहले टेक्स्ट दर्ज करें।",
             passTitle: "🔐 पासवर्ड दर्ज करें", passPlaceholder: "यहाँ टाइप करें...", passUnlock: "अनलॉक", passCancel: "रद्द करें",
             passWrong: "❌ गलत पासवर्ड!", passRemaining: "प्रयास शेष।",
+            passWeak: "सुरक्षा के लिए: 8+ वर्ण, 1 अपरकेस, 1 लोअरकेस, 1 नंबर, 1 प्रतीक।",
             
-            /* 印地语温馨提示 */
-            passWeak: "आपकी सुरक्षा के लिए, कृपया कम से कम 8 वर्णों का उपयोग करें:\n- 1 अपरकेस\n- 1 लोअरकेस\n- 1 नंबर\n- 1 प्रतीक",
+            /* [新增] 指纹提示语 - 印地语 */
+            hashHintSend: "यदि नीचे दिए गए इमोजी प्राप्तकर्ता से मेल खाते हैं, तो कुंजी सही है!",
+            hashHintRecv: "यदि दर्ज की गई कुंजी मेल खाती है, तो इमोजी भी मेल खाएंगे!",
 
             step1: "फ़ाइलें चुनें<br><span style='font-size:9px; opacity:0.7'>(टेक्स्ट लिखें)</span>", 
             step2: "पासवर्ड सेट करें<br><span style='font-size:9px; opacity:0.7'>(वैकल्पिक)</span>", 
@@ -951,6 +967,13 @@
         }
         document.getElementById('alert-password-input').placeholder = d.passPlaceholder;
         
+        // [新增] 更新指纹提示语
+        const sendHint = document.getElementById('send-hash-hint');
+        if(sendHint) sendHint.innerText = d.hashHintSend || "";
+        
+        const recvHint = document.getElementById('recv-hash-hint');
+        if(recvHint) recvHint.innerText = d.hashHintRecv || "";
+
         for(let i=1; i<=9; i++) {
              const q = document.getElementById(`faq-q${i}`); const a = document.getElementById(`faq-a${i}`);
              if(q && d[`faqQ${i}`]) q.innerText = d[`faqQ${i}`];
