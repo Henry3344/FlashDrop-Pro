@@ -69,6 +69,20 @@
         .ad-bottom { min-height: 0; margin-top: 20px; margin-bottom: 25px; }
         @media (max-width: 880px) { .ad-side { display: none !important; } }
         
+        /* --- [新增] Hero 区域样式 --- */
+        .hero-bullets { display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap; }
+        .hero-bullets span { background: rgba(99, 102, 241, 0.15); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; color: #c7d2fe; border: 1px solid rgba(99, 102, 241, 0.3); white-space: nowrap; box-shadow: 0 0 10px rgba(99, 102, 241, 0.1); }
+
+        /* --- [新增] 安全特性网格样式 --- */
+        .security-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin: 30px 0; width: 100%; }
+        .sec-card { background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 20px; text-align: left; transition: 0.3s; }
+        .sec-card:hover { border-color: var(--primary); background: rgba(30, 41, 59, 0.7); }
+        .sec-card h3 { color: white; margin: 0 0 10px 0; font-size: 15px; font-weight: 900; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
+        .sec-card p { font-size: 12px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+        .sec-card ul { margin: 10px 0 0 0; padding-left: 20px; color: var(--text-muted); font-size: 12px; line-height: 1.6; }
+        .fingerprint-demo { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; font-family: monospace; text-align: center; margin-bottom: 10px; font-size: 16px; border: 1px dashed rgba(255,255,255,0.2); }
+
+        /* ... 复用之前的 Card 样式 ... */
         .card { background: var(--card); padding: 25px; border-radius: 30px; backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.1); width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.9); }
         .tab-group { display: flex; background: rgba(51, 65, 85, 0.7); padding: 5px; border-radius: 18px; margin-bottom: 25px; }
         .tab { flex: 1; padding: 14px; cursor: pointer; border-radius: 14px; font-size: 14px; text-align: center; color: var(--text-muted); font-weight: 800; transition: 0.3s; }
@@ -80,7 +94,6 @@
         @media (max-width: 550px) { .share-grid { grid-template-columns: 1fr; } }
         .column-box { display: flex; flex-direction: column; gap: 10px; min-height: 220px; }
         
-        /* --- 拖拽区域 --- */
         #drop-zone { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: rgba(3, 7, 18, 0.95); display: none; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
         .file-zone { position: relative; border: 2.5px dashed var(--border); border-radius: 20px; padding: 25px; background: rgba(15, 23, 42, 0.5); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 150px; text-align: center; transition: 0.3s; backdrop-filter: blur(15px); }
         .file-zone.drag-active, #drop-zone.drag-active { background: rgba(99, 102, 241, 0.3); border-color: #fff; transform: scale(1.02); }
@@ -100,12 +113,10 @@
         #stagedList { display: none; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border); border-radius: 12px; padding: 10px; margin-bottom: 10px; max-height: 120px; overflow-y: auto; }
         .staged-item { display: flex; justify-content: space-between; align-items: center; font-size: 12px; padding: 6px 10px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 5px; }
         
-        /* AI Suggestions Styles */
         #ai-suggestions { display: none; font-size: 13px; margin-bottom: 8px; background: rgba(139, 92, 246, 0.1); padding: 12px 14px; border-radius: 12px; border-left: 3px solid var(--ai); color: #e9d5ff; text-align: left; }
         #ai-tag-container { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
         .ai-smart-tag { font-size: 11px; padding: 3px 8px; border-radius: 6px; background: rgba(139, 92, 246, 0.3); color: white; border: 1px solid rgba(139, 92, 246, 0.4); }
 
-        /* OCR 集成按钮样式 */
         .text-action-row { display: flex; gap: 10px; align-items: stretch; margin-top: auto; }
         
         .split-btn { 
@@ -137,7 +148,7 @@
         
         #btn-share-text { margin-top: 0; flex: 1; }
 
-        /* [复用与增强] 隐私警告样式 */
+        /* [复用] 隐私警告样式 (同时用于 AI Files 和 Text) */
         #ai-privacy-alert, #text-privacy-alert {
             display: none;
             margin-top: 10px;
@@ -183,52 +194,13 @@
         .pg-container { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin: 15px 0; display: none; position: relative; }
         .pg-bar { height: 100%; width: 0%; background: var(--primary); transition: width 0.3s; box-shadow: 0 0 10px var(--primary); }
 
-        /* --- 密码输入框 - 猴子加强版 --- */
-        .pwd-group {
-            display: flex;
-            align-items: center;
-            background: rgba(30, 41, 59, 0.5);
-            border: 2px solid #334155;
-            border-radius: 14px;
-            margin-bottom: 5px;
-            width: 100%;
-            transition: 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
+        .pwd-group { display: flex; align-items: center; background: rgba(30, 41, 59, 0.5); border: 2px solid #334155; border-radius: 14px; margin-bottom: 5px; width: 100%; transition: 0.3s; position: relative; overflow: hidden; }
         .pwd-group:focus-within { border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 241, 0.2); background: rgba(30, 41, 59, 0.8); }
-        
-        .pwd-group input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: white;
-            padding: 16px;
-            font-size: 16px;
-            outline: none;
-            letter-spacing: 1px;
-            text-align: center;
-            width: 100%;
-        }
-        
-        .pwd-divider {
-            width: 1px;
-            height: 24px;
-            background: rgba(255, 255, 255, 0.2);
-            margin: 0 5px;
-        }
-
-        .pwd-toggle {
-            padding: 0 15px;
-            font-size: 20px;
-            cursor: pointer;
-            user-select: none;
-            transition: transform 0.2s;
-            filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
-        }
+        .pwd-group input { flex: 1; background: transparent; border: none; color: white; padding: 16px; font-size: 16px; outline: none; letter-spacing: 1px; text-align: center; width: 100%; }
+        .pwd-divider { width: 1px; height: 24px; background: rgba(255, 255, 255, 0.2); margin: 0 5px; }
+        .pwd-toggle { padding: 0 15px; font-size: 20px; cursor: pointer; user-select: none; transition: transform 0.2s; filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)); }
         .pwd-toggle:active { transform: scale(0.9); }
 
-        /* ...其余样式保持不变... */
         .faq-container { max-width: 600px; margin: 40px auto; padding: 0 20px; text-align: left; }
         .faq-container h3 { font-size: 16px; color: var(--primary); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
         details { background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; margin-bottom: 10px; padding: 12px 15px; transition: 0.3s; }
@@ -270,8 +242,6 @@
         .crypto-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 6000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
         .crypto-modal-card { background: #0f172a; padding: 30px; border-radius: 24px; border: 1px solid var(--border); width: 90%; max-width: 380px; box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15); display: flex; flex-direction: column; gap: 15px; }
         
-        /* 移除旧的 input 样式，使用新的 .pwd-group */
-        
         .strength-wrapper { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; width: 100%; }
         .strength-track { flex: 1; height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 3px; overflow: hidden; }
         #strength-bar-fill { height: 100%; width: 0%; background-color: #ef4444; border-radius: 3px; transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.3s ease; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
@@ -291,15 +261,8 @@
         .input-error { border-color: #ef4444 !important; animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; color: #ef4444 !important; }
         #pass-error-msg { min-height: 20px; font-size: 12px; color: #ef4444; text-align: center; font-weight: 800; margin-bottom: 5px; }
 
-        .steps-bar { 
-            position: relative; display: flex; justify-content: space-between; align-items: center; 
-            margin-bottom: 25px; width: 100%; overflow: hidden; padding: 10px 0;
-        }
-        .steps-bar::after {
-            content: ''; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(90deg, transparent 0%, rgba(99, 102, 241, 0.2) 50%, transparent 100%);
-            transform: translateX(-100%); animation: flowSweep 3s infinite ease-in-out; pointer-events: none; z-index: 0;
-        }
+        .steps-bar { position: relative; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; width: 100%; overflow: hidden; padding: 10px 0; }
+        .steps-bar::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(90deg, transparent 0%, rgba(99, 102, 241, 0.2) 50%, transparent 100%); transform: translateX(-100%); animation: flowSweep 3s infinite ease-in-out; pointer-events: none; z-index: 0; }
         @keyframes flowSweep { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
         
         .step-item { display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 1; position: relative; flex: 1; }
@@ -364,10 +327,18 @@
 
         <div class="content-area">
             <div style="text-align: center; margin-bottom: 25px;">
-                <h1 id="hero-title" style="font-size: 26px; font-weight: 900; color: white; margin-bottom: 8px;">Secure File Sharing, Even We Can’t See.</h1>
-                <h2 id="hero-subtitle" style="font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 480px; margin: 0 auto;">
-                    Direct P2P transfer. Optional AES-256 encryption. No servers.
+                <h1 id="hero-title" style="font-size: 26px; font-weight: 900; color: white; margin-bottom: 8px;">FlashDrop — Secure P2P File & Text Transfer</h1>
+                <h2 id="hero-subtitle" style="font-size: 13px; color: var(--text-muted); line-height: 1.6; max-width: 550px; margin: 0 auto;">
+                    No server storage. End-to-end encrypted. Files never touch the cloud.<br>
+                    Share files & text directly between devices with optional password protection and self-destruct security.
                 </h2>
+                
+                <div class="hero-bullets">
+                    <span>🔒 AES-256 Encrypted</span>
+                    <span>🚫 No Cloud / Logs</span>
+                    <span>💥 Auto-Destruct</span>
+                    <span style="border-color: var(--ai); color: #d8b4fe; background: rgba(139, 92, 246, 0.15);">📷 Local OCR</span>
+                </div>
             </div>
 
             <div class="steps-bar">
@@ -393,9 +364,9 @@
                             
                             <div id="ai-suggestions" style="font-size: 13px;">
                                 <div style="display:flex; flex-wrap:wrap; align-items:center; gap:5px; margin-bottom:5px;">
-                                    <strong>✨ AI Insights</strong>
+                                    <strong id="ai-title-file">✨ AI Insights</strong>
                                     <span id="ai-insight-note" style="font-size:10px; opacity:0.6;">(Selected types)</span>
-                                    <span style="font-size:9px; opacity:0.7; margin-left:auto;">Local Processing</span>
+                                    <span id="ai-local-file" style="font-size:9px; opacity:0.7; margin-left:auto;">Local Processing</span>
                                 </div>
                                 <div id="ai-privacy-alert"></div>
                                 <div id="ai-tag-container"></div>
@@ -413,8 +384,8 @@
                             
                             <div id="text-ai-suggestions" style="display:none; font-size: 13px; margin-bottom: 5px; background: rgba(139, 92, 246, 0.1); padding: 12px 14px; border-radius: 12px; border-left: 3px solid var(--ai); color: #e9d5ff; text-align: left;">
                                 <div style="display:flex; flex-wrap:wrap; align-items:center; gap:5px; margin-bottom:5px;">
-                                    <strong>✨ AI Analysis</strong>
-                                    <span style="font-size:9px; opacity:0.7; margin-left:auto;">Local Processing</span>
+                                    <strong id="ai-title-text">✨ AI Analysis</strong>
+                                    <span id="ai-local-text" style="font-size:9px; opacity:0.7; margin-left:auto;">Local Processing</span>
                                 </div>
                                 <div id="text-privacy-alert"></div>
                             </div>
@@ -478,7 +449,7 @@
                         </div>
 
                         <div style="display:flex; align-items:center; gap:8px;">
-                            <span style="font-size:13px; color:#94a3b8; font-weight:700;">Limit:</span>
+                            <span id="limit-label" style="font-size:13px; color:#94a3b8; font-weight:700;">Limit:</span>
                             <select id="downloadLimit" style="background:#0f172a; color:#fff; border:1.5px solid var(--border); padding:0 10px; border-radius:8px; outline:none; height:40px; font-weight:600;">
                                 <option value="1">1 Time</option>
                                 <option value="3">3 Times</option>
@@ -536,6 +507,38 @@
             <script src="https://www.highperformanceformat.com/bd9abdb5a8bd5a53648a9afb54343727/invoke.js"></script>
         </div>
     </div>
+    <div style="width: 100%; max-width: 900px; margin: 0 auto; padding: 0 15px;">
+        <div class="security-grid">
+            <div class="sec-card">
+                <h3 id="sec-fp-title">🔐 Security Fingerprint</h3>
+                <div class="fingerprint-demo">
+                    <span style="opacity:0.7; font-size:12px;">Send:</span> ⚡🛡️🚀🐱 <br>
+                    <span style="opacity:0.7; font-size:12px;">Recv:</span> ⚡🛡️🚀🐱
+                </div>
+                <p id="sec-fp-desc">Visual verification prevents Man-in-the-Middle attacks. If emojis match, the line is secure.</p>
+            </div>
+            
+            <div class="sec-card">
+                <h3 id="sec-ai-title">🧠 AI Privacy Guard</h3>
+                <p style="font-size:10px; color:#a5b4fc; margin-bottom:8px; font-weight:700;">(Runs 100% Locally / No Upload)</p>
+                <ul id="sec-ai-list">
+                    <li>Detects IDs, Cards, Private Keys</li>
+                    <li>Warns BEFORE you send</li>
+                    <li>Suggests AES-256 automatically</li>
+                </ul>
+            </div>
+            
+            <div class="sec-card">
+                <h3 id="sec-burn-title">🔥 Security Burn™</h3>
+                <p id="sec-burn-desc">Wrong password 3 times = Connection DESTROYED instantly. Data gone forever.</p>
+                <div style="margin-top:12px; border-top:1px dashed rgba(255,255,255,0.1); padding-top:10px;">
+                    <h3 style="font-size:13px; color:#10b981;" id="sec-access-title">🎯 Controlled Access</h3>
+                    <p id="sec-access-desc">Limit downloads (1/3/5 times). Expired links become invalid immediately.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer class="legal-footer">
         <div class="faq-container">
             <h3 id="faq-title">Common Questions</h3>
@@ -623,18 +626,14 @@
     <div class="crypto-modal-card">
         <h3 id="pass-input-title" style="color: #f59e0b; margin: 0 0 5px 0; font-size: 18px; text-align: center;">🔐 Enter Password</h3>
         <div id="pass-error-msg"></div>
-        
         <div class="pwd-group">
             <input type="password" id="alert-password-input" placeholder="Type password..." style="text-align: center;" 
                    onkeyup="updateFingerprint(this.value, 'recv-fingerprint', 'recv-hash-hint')">
             <div class="pwd-divider"></div>
             <div class="pwd-toggle" onclick="togglePwd('alert-password-input', this)">🙈</div>
         </div>
-
         <p id="recv-hash-hint" style="display:none; font-size:10px; color:#94a3b8; margin: 8px 0 2px 0; text-align:center; line-height:1.4; opacity:0.8;"></p>
-
         <div id="recv-fingerprint" style="display:none; text-align: center; font-size: 24px; letter-spacing: 8px; margin: 5px 0; min-height: 36px; filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.5));"></div>
-
         <div style="display: flex; gap: 10px; margin-top: 10px;">
             <button class="action-btn" id="btn-pass-confirm" style="flex: 1; padding: 12px; margin:0; background: #f59e0b;">UNLOCK</button>
             <button class="action-btn" id="btn-pass-cancel" style="flex: 1; padding: 12px; background: #334155; margin:0;">CANCEL</button>
@@ -654,29 +653,39 @@
     function togglePwd(inputId, btn) { const input = document.getElementById(inputId); if (input.type === "password") { input.type = "text"; btn.innerText = "🙉"; } else { input.type = "password"; btn.innerText = "🙈"; } }
     async function updateFingerprint(val, elId, hintId) { const el = document.getElementById(elId); const hint = document.getElementById(hintId); if (!val) { el.innerText = ""; el.style.display = 'none'; if(hint) hint.style.display = 'none'; return; } el.style.display = 'block'; if(hint) hint.style.display = 'block'; const msgBuffer = new TextEncoder().encode(val); const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer); const hashArray = Array.from(new Uint8Array(hashBuffer)); const emojis = ["⚡","🛡️","🚀","🤖","💎","🔥","🌟","🌊","🐯","🐵","🍎","🍀","🎲","🧩","🔮","🎵","🎩","👻","🌵","🍕","🌙","☀️","🌈","❄️"]; let res = ""; for(let i=0; i<4; i++) { res += emojis[hashArray[i] % emojis.length]; } el.innerText = res; }
 
-    /* --- [多语言配置] --- */
+    /* --- [I18N 配置 - 包含新增营销文案的翻译] --- */
     const I18N = {
         en: { 
             tag: "EN", on: "Online", off: "Offline",
+            // Security Grid translations
+            secFpTitle: "🔐 Security Fingerprint", secFpDesc: "Visual verification prevents Man-in-the-Middle attacks.",
+            secAiTitle: "🧠 AI Privacy Guard", secAiList: "<li>Detects IDs, Cards, Keys</li><li>Warns BEFORE you send</li><li>Suggests AES-256 automatically</li>",
+            secBurnTitle: "🔥 Security Burn™", secBurnDesc: "3 wrong password attempts = Connection DESTROYED instantly.", secAccessTitle: "🎯 Controlled Access", secAccessDesc: "Limit downloads & Auto-expiration.",
+            // Existing...
             tabSend: "Send", tabReceive: "Receive", badges: ["🔒 P2P Encrypted", "🕵️ No Logs", "⚡ High Speed", "📂 Auto-Wipe"], drop: "DROP TO STAGE", fileLab: "Drop / Click", shareF: "SHARE FILES", shareT: "SHARE TEXT", connect: "DOWNLOAD", save: "📥 SAVE", recv: "RECEIVE", decryptRecv: "🔓 DECRYPT & VIEW", decryptSave: "🔓 DECRYPT & SAVE", saveNow: "💾 SAVE NOW", exp: "Expires: ", copyLink: "📋 COPY LINK", stop: "STOP", guide: "Scan QR or enter code on receiver device.", coffee: "Buy me a coffee", hPriv: "Privacy", hSite: "About Site", hUs: "About Us", inputErr: "Enter 6-digit code.", orScan: "or scan 📷", doneRemind: "DONE! Click SAVE above.", histTitle: "Recent History", fileErr: "Please select files first.", textErr: "Please enter text first.",
             passTitle: "🔐 Enter Password", passPlaceholder: "Type password...", passUnlock: "UNLOCK", passCancel: "CANCEL", passWrong: "Wrong Password!", passRemaining: "attempts left", passWeak: "For safety: 8+ chars, 1 Upper, 1 Lower, 1 Number, 1 Symbol.", hashHintSend: "Visual Check: If receiver's emojis match these, the key is correct!", hashHintRecv: "Visual Check: If the key matches, the emojis will match!",
             aiNote: "(Selected types)", privWarn: "⚠️ Privacy Alert: Filenames indicate sensitive info. AES-256 recommended!",
             ocrDone: "✅ Text Extracted!", ocrAdTitle: "Local OCR Processing... Please wait.", ocrScanTip: "Scan / Paste", ocrUploadTip: "Upload Image",
-            /* [增强] 敏感词警告 - 英文 */
             textPrivWarn: "🛡️ Security Alert: Potential password, key, passport or card number detected. AES-256 is highly recommended!",
             step1: "Select Files<br><span style='font-size:9px; opacity:0.7'>(Type Text)</span>", step2: "Set AES-256<br><span style='font-size:9px; opacity:0.7'>(Option)</span>", step3: "Get Code", step4: "Download",
-            heroTitle: "Secure File Sharing, Even We Can’t See.", heroSub: "Direct P2P transfer. Optional AES-256 encryption. No servers.", sig1: "No Limits", sig2: "P2P Only", sig3: "Auto-Wipe", modalTitle: "Set Password", btnEnable: "ENABLE", btnCancel: "CANCEL", aesOff: "AES-256 OFF", aesOn: "AES-256 ON", btnRuthless: "Ruthless Refusal (Session only)", strengthLevels: ["Very Weak", "Weak", "Medium", "Moderate", "Strong", "Very Strong", "Unbreakable"], faqTitle: "Common Questions", aiInsight: "✨ AI Insights", aiLocal: "Local Processing", aiTags: { img: "🖼️ Image", vid: "🎬 Video", doc: "📄 Document", code: "💻 Code", zip: "📦 Archive", big: "🐘 Large File" },
+            heroTitle: "FlashDrop — Secure P2P File & Text Transfer", heroSub: "No server storage. End-to-end encrypted. Files never touch the cloud.<br>Share files & text directly between devices with optional password protection and self-destruct security.", sig1: "No Limits", sig2: "P2P Only", sig3: "Auto-Wipe", modalTitle: "Set Password", btnEnable: "ENABLE", btnCancel: "CANCEL", aesOff: "AES-256 OFF", aesOn: "AES-256 ON", btnRuthless: "Ruthless Refusal (Session only)", strengthLevels: ["Very Weak", "Weak", "Medium", "Moderate", "Strong", "Very Strong", "Unbreakable"], faqTitle: "Common Questions", aiInsight: "✨ AI Insights", aiLocal: "Local Processing", aiTags: { img: "🖼️ Image", vid: "🎬 Video", doc: "📄 Document", code: "💻 Code", zip: "📦 Archive", big: "🐘 Large File" },
             faqQ1: "Do my files pass through your servers?", faqA1: "No. FlashDrop Pro utilizes a serverless P2P architecture powered by WebRTC.", faqQ2: "Do you retain any logs or metadata?", faqA2: "Absolutely not. We operate on a 'Zero-Knowledge' basis.", faqQ3: "What encryption standards are used?", faqA3: "All transfers are secured via WebRTC's DTLS/SRTP. Optional password protection adds AES-256-GCM.", faqQ4: "Is my IP address visible?", faqA4: "Due to P2P nature, the recipient needs your IP to connect. Use VPN for anonymity.", faqQ5: "Is it safe for confidential documents?", faqA5: "Yes. Data never rests on a third-party server.", faqQ6: "Can I recover files after closing tab?", faqA6: "No. Data exists only in RAM. Once closed, it is lost forever.", faqQ7: "Can staff access my files?", faqA7: "Impossible. We have no keys and no storage.", faqQ8: "Is password mandatory?", faqA8: "Optional, but recommended for sensitive data on local networks.", faqQ9: "Can you reset lost password?", faqA9: "No. We don't store passwords.", techPhrases: ["Generating RSA-4096 Key...", "Initializing WebRTC Handshake...", "Establishing P2P Tunnel...", "Synchronizing Peer Signals...", "Channel Secured!"]
         },
         zh: { 
             tag: "CN", on: "在线", off: "离线",
+            // Security Grid translations
+            secFpTitle: "🔐 安全指纹验证", secFpDesc: "可视化验证防止中间人攻击。Emoji 一致即安全。",
+            secAiTitle: "🧠 AI 隐私卫士", secAiList: "<li>自动检测证件、卡号、私钥</li><li>发送前发出警告</li><li>自动建议 AES-256 加密</li>",
+            secBurnTitle: "🔥 Security Burn™", secBurnDesc: "密码错误 3 次 = 连接立即销毁。数据永久消失。", secAccessTitle: "🎯 访问控制", secAccessDesc: "限制下载次数 (1/3/5) 及自动过期。",
+            // Existing...
             tabSend: "发送", tabReceive: "接收", badges: ["🔒 P2P 加密", "🕵️ 零日志", "⚡ 极速传输", "📂 阅后即焚"], drop: "松手上传", fileLab: "拖拽 / 点击", shareF: "分享文件", shareT: "分享文字", connect: "立即下载", save: "📥 保存文件", recv: "👀 查看文字", decryptRecv: "🔓 解密并查看", decryptSave: "🔓 解密并保存", saveNow: "💾 点击保存", exp: "有效期: ", copyLink: "📋 复制链接", stop: "停止分享", guide: "请对方扫描二维码或输入下方验证码。", coffee: "请我喝杯咖啡", hPriv: "隐私政策", hSite: "关于网站", hUs: "关于我们", inputErr: "请输入6位验证码。", orScan: "扫码接收 📷", doneRemind: "传输完成！点击上方按钮保存。", histTitle: "最近记录", fileErr: "请先选择文件。", textErr: "请先输入文字。",
             passTitle: "🔐 输入密码", passPlaceholder: "在此输入...", passUnlock: "解锁", passCancel: "取消", passWrong: "❌ 密码错误！", passRemaining: "次尝试机会。", passWeak: "为了安全：至少8位，需包含大写、小写、数字及符号。", hashHintSend: "AES-256密钥设置好后，只要接收方的emoji与下方的emoji相符即为密钥正确！", hashHintRecv: "只要输入的AES-256密钥一致，emoji就会一致！",
             aiNote: "(以下是你已选中的文件类型)", privWarn: "⚠️ 隐私提醒：文件名包含敏感信息。强烈建议开启 AES-256 加密！",
             ocrDone: "✅ 提取成功!", ocrAdTitle: "正在本地识别文字，请稍等...", ocrScanTip: "截屏 / 粘贴", ocrUploadTip: "上传图片",
-            /* [增强] 敏感词警告 - 中文 */
             textPrivWarn: "🛡️ 安全警告：检测到疑似密码、私钥、护照或银行卡号。强烈建议开启 AES-256 加密！",
-            step1: "选文件<br><span style='font-size:9px; opacity:0.7'>(可输文字)</span>", step2: "设密码<br><span style='font-size:9px; opacity:0.7'>(可选加密)</span>", step3: "取件码", step4: "下载", heroTitle: "安全传输，只有天知地知你知。", heroSub: "点对点直连。可选 AES-256 加密。不经服务器。", sig1: "无限制", sig2: "仅P2P", sig3: "自动销毁", modalTitle: "设置密码", btnEnable: "启用保护", btnCancel: "取消", aesOff: "AES-256 关闭", aesOn: "AES-256 开启", btnRuthless: "狠心拒绝（仅这次）", strengthLevels: ["极弱", "弱", "中等", "稍强", "强", "极强", "特别强"], faqTitle: "常见问题", aiInsight: "✨ AI 智能分析", aiLocal: "本地处理", aiTags: { img: "🖼️ 图像", vid: "🎬 视频", doc: "📄 文档", code: "💻 代码", zip: "📦 压缩包", big: "🐘 大文件" },
+            step1: "选文件<br><span style='font-size:9px; opacity:0.7'>(可输文字)</span>", step2: "设密码<br><span style='font-size:9px; opacity:0.7'>(可选加密)</span>", step3: "取件码", step4: "下载", 
+            heroTitle: "FlashDrop — 安全的 P2P 文件传输", heroSub: "无服务器存储。端到端加密。文件永不上云。<br>支持 AES-256 加密保护与自毁机制。",
+            sig1: "无限制", sig2: "仅P2P", sig3: "自动销毁", modalTitle: "设置密码", btnEnable: "启用保护", btnCancel: "取消", aesOff: "AES-256 关闭", aesOn: "AES-256 开启", btnRuthless: "狠心拒绝（仅这次）", strengthLevels: ["极弱", "弱", "中等", "稍强", "强", "极强", "特别强"], faqTitle: "常见问题", aiInsight: "✨ AI 智能分析", aiLocal: "本地处理", aiTags: { img: "🖼️ 图像", vid: "🎬 视频", doc: "📄 文档", code: "💻 代码", zip: "📦 压缩包", big: "🐘 大文件" },
             faqQ1: "文件会经过你们的服务器吗？", faqA1: "不会。FlashDrop Pro 采用 WebRTC 无服务器 P2P 架构。数据直连传输。", faqQ2: "你们会保留日志吗？", faqA2: "绝不。我们零知识运营，不存 IP 或日志。", faqQ3: "使用什么加密？", faqA3: "WebRTC 强制 DTLS/SRTP。密码保护增加 AES-256-GCM。", faqQ4: "对方能看到我IP吗？", faqA4: "P2P 需要 IP 直连。介意请用 VPN。", faqQ5: "传机密文件安全吗？", faqA5: "安全。数据不经过第三方服务器。", faqQ6: "关掉页面能恢复吗？", faqA6: "不能。数据只在内存里，关掉即焚。", faqQ7: "员工能看文件吗？", faqA7: "不能。我们没密钥也没存储。", faqQ8: "必须设密码吗？", faqA8: "可选。但建议局域网内使用时设置。", faqQ9: "能重置密码吗？", faqA9: "不能。忘了就真没了。", techPhrases: ["正在生成 RSA-4096 密钥...", "初始化 WebRTC 握手...", "建立 P2P 加密隧道...", "同步对等信号...", "安全通道已建立!"]
         },
         ja: { tag: "JP", on: "オンライン", off: "オフライン", ocrDone: "✅ 完了!", ocrAdTitle: "OCR処理中...お待ちください", ocrScanTip: "スキャン / 貼付", ocrUploadTip: "画像アップロード", textPrivWarn: "🛡️ セキュリティ警告：パスワード、鍵、パスポート、またはカード番号が検出されました。AES-256を推奨！", badges: ["🔒 P2P暗号化", "🕵️ ログなし", "⚡ 高速転送", "📂 自動消去"], drop: "ここにドロップ", fileLab: "クリックして選択", shareF: "ファイルを共有", shareT: "テキストを共有", connect: "ダウンロード", save: "📥 保存する", recv: "👀 テキスト表示", decryptRecv: "🔓 復号して表示", decryptSave: "🔓 復号して保存", saveNow: "💾 保存をクリック", exp: "有効期限: ", copyLink: "📋 リンクをコピー", stop: "停止", guide: "QRコードをスキャンするか、コードを入力してください。", coffee: "コーヒーを奢る", hPriv: "プライバシー", hSite: "サイトについて", hUs: "私たちについて", inputErr: "6桁のコードを入力してください。", orScan: "QRスキャン 📷", doneRemind: "完了！上のボタンで保存してください。", histTitle: "最近の履歴", fileErr: "ファイルを選択してください。", textErr: "テキストを入力してください。", passTitle: "🔐 パスワード入力", passPlaceholder: "ここに入力...", passUnlock: "解除", passCancel: "キャンセル", passWrong: "❌ パスワードが違います！", passRemaining: "回試行可能。", passWeak: "安全のため：8文字以上、大文字・小文字・数字・記号を含めてください。", hashHintSend: "AES-256キー設定後、受信側の絵文字と一致していればキーは正しいです！", hashHintRecv: "入力したAES-256キーが一致すれば、絵文字も一致します！", aiNote: "(選択されたファイル形式)", privWarn: "⚠️ プライバシー警告：ファイル名に機密情報が含まれています。AES-256暗号化を強く推奨します！", step1: "ファイル選択<br><span style='font-size:9px; opacity:0.7'>(テキスト可)</span>", step2: "暗号化設定<br><span style='font-size:9px; opacity:0.7'>(任意)</span>", step3: "コード取得", step4: "ダウンロード", heroTitle: "安全なファイル共有。私たちも見えません。", heroSub: "P2P直接転送。AES-256暗号化オプション。サーバーなし。", sig1: "無制限", sig2: "P2Pのみ", sig3: "自動消去", modalTitle: "パスワード設定", btnEnable: "有効にする", btnCancel: "キャンセル", aesOff: "AES-256 オフ", aesOn: "AES-256 オン", btnRuthless: "拒否する（今回のみ）", strengthLevels: ["極弱", "弱", "普通", "やや強", "強", "極強", "最強"], faqTitle: "よくある質問", aiInsight: "✨ AI 分析", aiLocal: "ローカル処理", aiTags: { img: "🖼️ 画像", vid: "🎬 動画", doc: "📄 文書", code: "💻 コード", zip: "📦 圧縮", big: "🐘 大容量" }, faqQ1: "サーバーを経由しますか？", faqA1: "いいえ。WebRTCによるP2P直接転送です。", faqQ2: "ログは保存されますか？", faqA2: "いいえ。ゼロ知識ベースで、ログは一切保存しません。", faqQ3: "暗号化方式は？", faqA3: "WebRTCのDTLS/SRTPに加え、AES-256-GCMが利用可能です。", faqQ4: "IPは見えますか？", faqA4: "P2Pの性質上、接続にはIPが必要です。", faqQ5: "機密データは安全ですか？", faqA5: "はい。サーバーに保存されないため安全です。", faqQ6: "復元できますか？", faqA6: "いいえ。メモリ上のデータは消えます。", faqQ7: "運営は見れますか？", faqA7: "不可能です。鍵もデータも持ちません。", faqQ8: "パスワードは必須？", faqA8: "任意ですが、推奨します。", faqQ9: "リセットできますか？", faqA9: "いいえ。紛失すると復元できません。", techPhrases: ["RSA鍵を生成中...", "WebRTCハンドシェイク...", "P2Pトンネル確立中...", "信号を同期中...", "安全な接続完了!"] },
@@ -744,20 +753,22 @@
         }
     };
 
-    /* --- [AI 引擎 - 文字隐私嗅探 (控制整个面板)] --- */
+    /* --- [关键修复] AI 引擎 - 文字隐私嗅探 (控制面板显隐) --- */
     function checkTextPrivacy(text) {
-        // 这里控制的是那个紫色的父容器
         const container = document.getElementById('text-ai-suggestions');
         const alertBox = document.getElementById('text-privacy-alert');
         
+        // 容错处理：万一 HTML 结构还没加载好，避免报错
+        if (!container || !alertBox) return;
+
         if (!text || text.trim().length === 0) {
-            container.style.display = 'none'; // 没有文字，直接隐藏整个面板
+            container.style.display = 'none'; // 无内容隐藏面板
             return;
         }
         
         const lowerText = text.toLowerCase();
         
-        // 1. 关键字匹配 (扩充版)
+        // 1. 扩充版关键词库
         const triggers = [
             "password", "passwd", "secret", "private key", "api_key", "access_token", 
             "mnemonics", "wallet", "credit card", "cvv", "ssn", "passport", "visa", 
@@ -766,7 +777,7 @@
             "-----begin private key-----", "0x" 
         ];
         
-        // 2. 正则匹配：13-19位连续数字 (常见银行卡号/身份证特征)
+        // 2. 正则：13-19位数字 (疑似卡号)
         const cardRegex = /\b\d{13,19}\b/;
         
         let detected = false;
@@ -783,14 +794,12 @@
         }
 
         if (detected) {
-            // 命中！显示整个紫色面板
-            container.style.display = 'block'; 
-            alertBox.style.display = 'block'; // 确保内部警告也是显示的
+            container.style.display = 'block'; // 命中！显示整个紫色面板
+            alertBox.style.display = 'block';
             const d = I18N[currLang] || I18N['en'];
             alertBox.innerText = d.textPrivWarn || "⚠️ Sensitive Info Detected!";
         } else {
-            // 未命中，隐藏面板
-            container.style.display = 'none';
+            container.style.display = 'none'; // 未命中，隐藏
         }
     }
 
@@ -825,7 +834,7 @@
             const textBox = document.getElementById('quickText');
             textBox.value += (textBox.value ? "\n" : "") + text.trim();
             updateTextCount(textBox);
-            // 识别完后，AI 立即检查是否有敏感词
+            // 识别完成后，立即触发 AI 检查
             checkTextPrivacy(textBox.value);
             showCustomAlert((I18N[currLang] || I18N['en']).ocrDone || "Text Extracted!");
         } catch (e) { showCustomAlert("OCR Error: " + e.message); } 
@@ -867,7 +876,7 @@
         }
     });
 
-    /* --- [常规逻辑] --- */
+    /* --- [常规逻辑 & I18N 映射] --- */
     function updateNetworkStatus() {
         const isOnline = navigator.onLine; const dot = document.getElementById('status-dot'); const text = document.getElementById('status-text');
         if (isOnline) { dot.className = 'status-dot online'; text.className = 'status-text online'; text.innerText = (I18N[currLang] || I18N['en']).on; } 
@@ -880,16 +889,25 @@
         const d = I18N[currLang] || I18N['en']; document.getElementById('currentLangTag').innerText = d.tag;
         updateNetworkStatus();
         const map = {
-            'tab-send': d.tabSend, 'tab-receive': d.tabReceive, 'drop-text': d.drop, 'label-files': d.fileLab, 'btn-share-files': d.shareF, 'btn-share-text': d.shareT, 'btn-connect': d.connect, 'btn-save-file': d.save, 'btn-copy-link': d.copyLink, 'btn-stop': d.stop, 'guideText': d.guide, 'foot-coffee': d.coffee, 'link-priv': d.hPriv, 'link-site': d.hSite, 'link-us': d.hUs, 'btn-scan': d.orScan, 'history-title-text': d.histTitle, 'step-1': d.step1, 'step-2': d.step2, 'step-3': d.step3, 'step-4': d.step4, 'hero-title': d.heroTitle, 'signal-1': d.sig1, 'signal-2': d.sig2, 'signal-3': d.sig3, 'modal-pass-title': d.modalTitle, 'btn-enable-pass': d.btnEnable, 'btn-cancel-pass': d.btnCancel, 'aes-off-txt': d.aesOff, 'aes-on-txt': d.aesOn, 'btn-ruthless-text': d.btnRuthless, 'faq-title': d.faqTitle, 'pass-input-title': d.passTitle, 'btn-pass-confirm': d.passUnlock, 'btn-pass-cancel': d.passCancel, 'ai-insight-note': d.aiNote, 'ocr-ad-title': d.ocrAdTitle || "Processing...", 'ocr-loading-text': d.ocrProcessing || "Processing..."
+            'tab-send': d.tabSend, 'tab-receive': d.tabReceive, 'drop-text': d.drop, 'label-files': d.fileLab, 'btn-share-files': d.shareF, 'btn-share-text': d.shareT, 'btn-connect': d.connect, 'btn-save-file': d.save, 'btn-copy-link': d.copyLink, 'btn-stop': d.stop, 'guideText': d.guide, 'foot-coffee': d.coffee, 'link-priv': d.hPriv, 'link-site': d.hSite, 'link-us': d.hUs, 'btn-scan': d.orScan, 'history-title-text': d.histTitle, 'step-1': d.step1, 'step-2': d.step2, 'step-3': d.step3, 'step-4': d.step4, 'hero-title': d.heroTitle, 'hero-subtitle': d.heroSub, 'signal-1': d.sig1, 'signal-2': d.sig2, 'signal-3': d.sig3, 'modal-pass-title': d.modalTitle, 'btn-enable-pass': d.btnEnable, 'btn-cancel-pass': d.btnCancel, 'aes-off-txt': d.aesOff, 'aes-on-txt': d.aesOn, 'btn-ruthless-text': d.btnRuthless, 'faq-title': d.faqTitle, 'pass-input-title': d.passTitle, 'btn-pass-confirm': d.passUnlock, 'btn-pass-cancel': d.passCancel, 'ai-insight-note': d.aiNote, 'ocr-ad-title': d.ocrAdTitle || "Processing...", 'ocr-loading-text': d.ocrProcessing || "Processing...",
+            // [Security Grid 映射]
+            'sec-fp-title': d.secFpTitle, 'sec-fp-desc': d.secFpDesc,
+            'sec-ai-title': d.secAiTitle, 'sec-ai-list': d.secAiList, 
+            'sec-burn-title': d.secBurnTitle, 'sec-burn-desc': d.secBurnDesc,
+            'sec-access-title': d.secAccessTitle, 'sec-access-desc': d.secAccessDesc
         };
         for (const [id, text] of Object.entries(map)) {
             const el = document.getElementById(id);
-            if(el) { if(id === 'btn-ruthless') { const span = document.getElementById('btn-ruthless-text'); if(span) span.innerText = text; else el.innerText = text; } else { el.innerHTML = text; } }
+            if(el) { 
+                if(id === 'btn-ruthless') { const span = document.getElementById('btn-ruthless-text'); if(span) span.innerText = text; else el.innerText = text; } 
+                else if(id === 'hero-subtitle' || id === 'step-1' || id === 'step-2' || id === 'sec-ai-list') { el.innerHTML = text; } 
+                else { el.innerText = text; } 
+            }
         }
         document.getElementById('tip-scan').setAttribute('data-tip', d.ocrScanTip || "Scan");
         document.getElementById('tip-upload').setAttribute('data-tip', d.ocrUploadTip || "Upload");
         
-        // 更新可能已经显示的文字隐私警告内容
+        // 更新可能已经显示的文字隐私警告
         const textAlert = document.getElementById('text-privacy-alert');
         if (textAlert && textAlert.innerText) { textAlert.innerText = d.textPrivWarn; }
 
@@ -919,8 +937,10 @@
     function typeWriterEffect(element, text) { element.innerText = ""; let i = 0; const badge = document.getElementById('recv-text-count'); const scrollBox = document.getElementById('recv-scroll-box'); if(badge) badge.style.display = 'block'; const step = Math.max(1, Math.floor(text.length / 50)); function type() { if (i < text.length) { const chunk = text.slice(i, i + step); element.innerText += chunk; i += step; if(badge) badge.innerText = Math.min(i, text.length) + " Chars"; if(scrollBox) scrollBox.scrollTop = scrollBox.scrollHeight; requestAnimationFrame(type); } else { element.innerText = text; if(badge) badge.innerText = text.length + " Chars"; if(scrollBox) scrollBox.scrollTop = scrollBox.scrollHeight; } } type(); }
     function checkUrlCode() { const urlParams = new URLSearchParams(window.location.search); const code = urlParams.get('c'); if (code) { document.getElementById('tab-receive').click(); document.getElementById('targetCode').value = code; } }
     async function initSender() { if(peer) peer.destroy(); currentDownloads = 0; const code = Math.floor(100000 + Math.random() * 900000); peer = new Peer(PREFIX + code); document.getElementById('ai-suggestions').style.display = 'none'; 
-        // [新增] 隐藏 Text AI 面板
-        document.getElementById('text-ai-suggestions').style.display = 'none';
+        // [修复] 确保在重置时隐藏 text 面板，并且不会因为元素不存在而报错
+        const textPanel = document.getElementById('text-ai-suggestions');
+        if (textPanel) textPanel.style.display = 'none';
+        
         peer.on('open', () => { const area = document.getElementById('senderCodeArea'); if (area) { area.style.display = 'block'; setTimeout(() => { area.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 200); } document.getElementById('myCode').innerText = code; document.getElementById('qrcode').innerHTML = ""; new QRCode(document.getElementById('qrcode'), { text: window.location.origin + window.location.pathname + "?c=" + code, width: 140, height: 140 }); document.getElementById('btn-copy-link').onclick = () => { const link = `${window.location.origin}${window.location.pathname}?c=${code}`; navigator.clipboard.writeText(link).then(() => { showCustomAlert("Link Copied! Send it to friend."); }); }; startExpiryTimer(); }); peer.on('connection', c => { c.on('data', d => { if (d.type === 'security_burn') { showCustomAlert("⚠️ SECURITY ALERT: Recipient failed authentication 3 times."); resetSender(); return; } if(d.type === 'confirm_save') { currentDownloads++; if(currentDownloads >= parseInt(document.getElementById('downloadLimit').value)) resetSender(); } }); c.on('open', async () => { let textValue = document.getElementById('quickText').value.trim(); if(textValue) { if(isEncrypted) { const encryptedTextBlob = await FlashDropCrypto.encrypt(new Blob([textValue]), aesKey); const reader = new FileReader(); reader.onload = () => c.send({ type: 'text', data: reader.result, encrypted: true }); reader.readAsDataURL(encryptedTextBlob); } else { c.send({ type: 'text', data: textValue, encrypted: false }); } addHistory("Sent: Text", "text"); } if(stagedFiles && stagedFiles.length > 0) { let fb, fn = stagedFiles.length === 1 ? stagedFiles[0].name : "Bundle.zip"; if (stagedFiles.length === 1) { fb = stagedFiles[0]; } else { const zip = new JSZip(); stagedFiles.forEach(f => zip.file(f.name, f)); fb = await zip.generateAsync({type: "blob"}); } if(isEncrypted) { fb = await FlashDropCrypto.encrypt(fb, aesKey); fn += ".enc"; } c.send({ type: 'meta', name: fn, size: fb.size, encrypted: isEncrypted }); const arrayBuffer = await fb.arrayBuffer(); for (let i = 0; i < fb.size; i += CHUNK_SIZE) { while (c.bufferSize > 1024 * 1024) { await new Promise(r => setTimeout(r, 50)); } c.send({ type: 'chunk', index: i/CHUNK_SIZE, data: arrayBuffer.slice(i, i + CHUNK_SIZE) }); } c.send({ type: 'done' }); addHistory("Sent: " + fn, "file"); } }); }); }
     function startReceiving() { const code = document.getElementById('targetCode').value; const rPeer = new Peer(); const pgBar = document.getElementById('receive-pg-bar'); document.getElementById('receive-pg-container').style.display = 'block'; const btn = document.getElementById('btn-connect'); btn.disabled = true; btn.style.opacity = "0.7"; let dots = 0; if(downloadDotsIdx) clearInterval(downloadDotsIdx); downloadDotsIdx = setInterval(() => { dots = (dots + 1) % 4; btn.innerText = "Downloading" + ".".repeat(dots); }, 400); rPeer.on('open', () => { const conn = rPeer.connect(PREFIX + code, { reliable: true }); activeConn = conn; let meta = null, chunks = [], totalRecv = 0, startTime = Date.now(), lastUpdate = 0; conn.on('data', async d => { if(d.type === 'text') { if(downloadDotsIdx) clearInterval(downloadDotsIdx); const label = d.encrypted ? I18N[currLang].decryptRecv : I18N[currLang].recv; const bg = d.encrypted ? "#f59e0b" : "#10b981"; btn.innerText = label; btn.style.background = bg; btn.disabled = false; btn.style.opacity = "1"; btn.onclick = async () => { let finalTxt = d.data; if(d.encrypted) { let attempts = 0; while(true) { const pass = await requestPassword(attempts > 0 ? 3 - attempts : undefined); if (!pass) return; try { const res = await fetch(d.data); const blob = await res.blob(); const ptBlob = await FlashDropCrypto.decrypt(blob, pass); finalTxt = await ptBlob.text(); document.getElementById('pass-input-modal').style.display = 'none'; break; } catch(e) { attempts++; if(attempts >= 3) { document.getElementById('pass-input-modal').style.display = 'none'; conn.send({ type: 'security_burn' }); showCustomAlert("❌ SECURITY BREACH: Data Wiped."); resetReceiver(); return; } } } } const textBox = document.getElementById('receivedText'); document.getElementById('receivedText-container').style.display = 'block'; typeWriterEffect(textBox, finalTxt); pgBar.style.width = '100%'; btn.onclick = () => triggerAd('receive'); btn.innerText = I18N[currLang].connect; btn.style.background = "var(--primary)"; if (conn && conn.open) { conn.send({ type: 'confirm_save' }); } }; } else if(d.type === 'meta') { meta = d; startTime = Date.now(); const stats = document.getElementById('receiveNerdStats'); stats.style.display = 'flex'; const warnText = { en: "Downloading... Keep Open!", zh: "正在下载... 请勿关闭页面！" }[currLang] || "Downloading... Keep Open!"; stats.innerHTML = `<span id="nerd-speed">0.0 MB/s</span><span class="blink-warn">${warnText}</span><span id="nerd-eta" style="color:var(--primary)">ETA: --s</span>`; } else if(d.type === 'chunk') { chunks.push(d.data); totalRecv += d.data.byteLength; if(meta) { pgBar.style.width = (totalRecv / meta.size * 100) + '%'; const now = Date.now(); if (now - lastUpdate > 500 || totalRecv === meta.size) { const duration = (now - startTime) / 1000; const speed = duration > 0 ? (totalRecv / 1024 / 1024 / duration) : 0; const remainingBytes = meta.size - totalRecv; const eta = speed > 0 ? (remainingBytes / 1024 / 1024 / speed) : 0; const spdEl = document.getElementById('nerd-speed'); const etaEl = document.getElementById('nerd-eta'); if(spdEl) spdEl.innerText = speed.toFixed(1) + ' MB/s'; if(etaEl) etaEl.innerText = 'ETA: ' + Math.ceil(eta) + 's'; lastUpdate = now; } } } else if(d.type === 'done') { if(downloadDotsIdx) clearInterval(downloadDotsIdx); const label = (meta && meta.encrypted) ? I18N[currLang].decryptSave : I18N[currLang].save; const bg = (meta && meta.encrypted) ? "#f59e0b" : "#10b981"; btn.innerText = label; btn.style.background = bg; btn.disabled = false; btn.style.opacity = "1"; document.getElementById('receiveNerdStats').innerHTML = `<span style="color:var(--success); width:100%; text-align:center;">✅ TRANSFER COMPLETE</span>`; pgBar.style.width = '100%'; let finalBlob = new Blob(chunks); btn.onclick = async () => { if (meta && meta.encrypted) { let attempts = 0; while(true) { const pass = await requestPassword(attempts > 0 ? 3 - attempts : undefined); if (!pass) return; try { finalBlob = await FlashDropCrypto.decrypt(finalBlob, pass); document.getElementById('pass-input-modal').style.display = 'none'; btn.innerText = "💾 SAVE NOW"; btn.style.background = "#10b981"; btn.onclick = () => { const u = window.URL.createObjectURL(finalBlob); const a = document.createElement('a'); a.href = u; a.download = meta.name.replace('.enc', ''); a.click(); if (conn && conn.open) { conn.send({ type: 'confirm_save' }); } addHistory("Received: " + meta.name.replace('.enc', ''), "file"); setTimeout(() => { resetReceiver(); rPeer.destroy(); }, 1000); }; return; } catch (e) { attempts++; if(attempts >= 3) { document.getElementById('pass-input-modal').style.display = 'none'; conn.send({ type: 'security_burn' }); showCustomAlert("❌ SECURITY BREACH: Data Wiped."); resetReceiver(); return; } } } } else { const u = window.URL.createObjectURL(finalBlob); const a = document.createElement('a'); a.href = u; a.download = meta.name.replace('.enc', ''); a.click(); if (conn && conn.open) { conn.send({ type: 'confirm_save' }); } addHistory("Received: " + meta.name.replace('.enc', ''), "file"); setTimeout(() => { resetReceiver(); rPeer.destroy(); }, 1000); } }; } }); }); }
     function addHistory(name, type) { let h = JSON.parse(localStorage.getItem('fd_history') || "[]"); h.unshift({ name: name.substring(0,25), time: new Date().toLocaleTimeString(), type: type }); h = h.slice(0, 5); localStorage.setItem('fd_history', JSON.stringify(h)); renderHistory(); }
@@ -930,8 +950,9 @@
     function closePolicy() { document.getElementById('policyModal').style.display = 'none'; }
     function startExpiryTimer() { let sec = 600; if(expiryTimerIdx) clearInterval(expiryTimerIdx); expiryTimerIdx = setInterval(() => { sec--; document.getElementById('expiryTimer').innerText = `${I18N[currLang].exp}${Math.floor(sec/60)}:${(sec%60).toString().padStart(2,'0')}`; if(sec <= 0) resetSender(); }, 1000); }
     function resetSender() { if(peer) peer.destroy(); document.getElementById('senderCodeArea').style.display = 'none'; stagedFiles = []; renderStagedList(); document.getElementById('ai-suggestions').style.display = 'none'; 
-        // [新增] 隐藏 Text AI 面板
-        document.getElementById('text-ai-suggestions').style.display = 'none'; 
+        // [修复] 安全清理 text panel
+        const textPanel = document.getElementById('text-ai-suggestions');
+        if(textPanel) textPanel.style.display = 'none'; 
         const quickText = document.getElementById('quickText'); quickText.value = ""; quickText.blur(); updateTextCount(quickText); if(expiryTimerIdx) clearInterval(expiryTimerIdx); window.scrollTo({ top: 0, behavior: 'smooth' }); setTimeout(() => window.scrollTo(0,0), 300); 
     }
     function resetReceiver() { if(downloadDotsIdx) clearInterval(downloadDotsIdx); const btn = document.getElementById('btn-connect'); btn.innerText = I18N[currLang].connect; btn.style.background = "var(--primary)"; btn.disabled = false; btn.style.opacity = "1"; btn.onclick = () => triggerAd('receive'); document.getElementById('targetCode').value = ""; document.getElementById('receive-pg-container').style.display = 'none'; document.getElementById('receiveNerdStats').style.display = 'none'; document.getElementById('receivedText-container').style.display = 'none'; document.getElementById('recv-text-count').style.display = 'none'; activeConn = null; }
