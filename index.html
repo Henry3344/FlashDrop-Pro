@@ -342,7 +342,6 @@
                 <div class="step-line"></div>
                 <div class="step-item"><div class="step-dot"></div><span id="step-4">Download</span></div>
             </div>
-
             <div class="card">
                 <div class="tab-group"><div id="tab-send" class="tab active" onclick="switchTab('send', event)">Send</div><div id="tab-receive" class="tab" onclick="switchTab('receive', event)">Receive</div></div>
                 
@@ -481,7 +480,6 @@
             <script src="https://www.highperformanceformat.com/bd9abdb5a8bd5a53648a9afb54343727/invoke.js"></script>
         </div>
     </div>
-
     <footer class="legal-footer">
         <div class="faq-container">
             <h3 id="faq-title">Common Questions</h3>
@@ -971,14 +969,13 @@
             techPhrases: ["RSA कुंजी बना रहा है...", "WebRTC शुरू हो रहा है...", "P2P टनल...", "सिंक्रनाइज़ हो रहा है...", "चैनल सुरक्षित!"]
         }
     };
-
     let currLang = "en", peer = null, stagedFiles = [], currentDownloads = 0, videoTrack = null, torchOn = false, activeConn = null, expiryTimerIdx = null;
     let isAdBlockIgnored = false; 
     let downloadDotsIdx = null; 
     const PREFIX = "fd-pro-";
     const CHUNK_SIZE = 64 * 1024; 
 
-    /* --- [AI 引擎升级：隐私敏感词检测] --- */
+    /* --- [AI 引擎：实时联动] --- */
     const AIEngine = {
         analyze(files) {
             const tags = new Set();
@@ -994,7 +991,6 @@
                 zip: ['zip','rar','7z','tar','gz','iso','dmg','pkg']
             };
 
-            // 敏感词库 (多语言混合)
             const sensitiveKeywords = [
                 'id', 'passport', 'visa', 'resume', 'cv', 'address', 'phone', 'email', 'secret', 'bank', 'statement', 'tax', 'ssn', 'insurance', 'contract',
                 '身份证', '护照', '简历', '住址', '房产', '银行', '账单', '税', '保险', '合同', '指纹', '姓名', '性别', '民族',
@@ -1006,7 +1002,6 @@
                 const name = f.name.toLowerCase();
                 const ext = name.split('.').pop();
                 
-                // 1. 类型分析
                 if(exts.img.includes(ext)) tags.add('img');
                 else if(exts.vid.includes(ext)) tags.add('vid');
                 else if(exts.doc.includes(ext)) tags.add('doc');
@@ -1015,7 +1010,6 @@
                 
                 if(f.size > 100 * 1024 * 1024) tags.add('big'); 
 
-                // 2. 隐私检测
                 if (!hasPrivacyRisk) {
                     for (const kw of sensitiveKeywords) {
                         if (name.includes(kw)) {
@@ -1034,32 +1028,30 @@
             const wrapper = document.getElementById('ai-suggestions');
             const alertBox = document.getElementById('ai-privacy-alert');
 
-            // 如果没有标签，隐藏 AI 区域
-            if(data.tags.length === 0) { 
+            // [逻辑保持] 无数据则隐藏
+            if(!data || !data.tags || data.tags.length === 0) { 
                 wrapper.style.display = 'none'; 
+                alertBox.style.display = 'none';
                 return; 
             }
             
             wrapper.style.display = 'block';
             
-            // 渲染隐私警告
             if (data.risk) {
                 alertBox.style.display = 'block';
-                // 动态获取当前语言的警告语
                 const d = I18N[currLang] || I18N['en'];
                 alertBox.innerText = d.privWarn;
             } else {
                 alertBox.style.display = 'none';
             }
 
-            // 渲染标签
             const dict = (I18N[currLang] || I18N['en']).aiTags;
             container.innerHTML = data.tags.map(t => `<span class="ai-smart-tag">${dict[t] || t}</span>`).join('');
         }
     };
 
-    /* [新增] 状态切换函数 */
-    function updateConnectionStatus(isOnline) {
+    function updateNetworkStatus() {
+        const isOnline = navigator.onLine;
         const dot = document.getElementById('status-dot');
         const text = document.getElementById('status-text');
         
@@ -1078,20 +1070,17 @@
         }
     }
 
+    window.addEventListener('online', updateNetworkStatus);
+    window.addEventListener('offline', updateNetworkStatus);
+
     function applyI18N() {
         const userLang = navigator.language.split('-')[0];
         currLang = I18N[userLang] ? userLang : "en";
-        const d = I18N[currLang] || I18N['en']; // Fallback
+        const d = I18N[currLang] || I18N['en']; 
         const tagEl = document.getElementById('currentLangTag');
         if(tagEl) tagEl.innerText = d.tag;
         
-        // [修改] 更新状态文字
-        const statusText = document.getElementById('status-text');
-        if(statusText) {
-            // 检查当前是不是红色（离线）状态
-            const isOffline = statusText.classList.contains('offline');
-            statusText.innerText = isOffline ? d.off : d.on;
-        }
+        updateNetworkStatus();
         
         const map = {
             'tab-send': d.tabSend, 'tab-receive': d.tabReceive,
@@ -1108,7 +1097,6 @@
             'aes-off-txt': d.aesOff, 'aes-on-txt': d.aesOn, 
             'btn-ruthless-text': d.btnRuthless, 'faq-title': d.faqTitle,
             'pass-input-title': d.passTitle, 'btn-pass-confirm': d.passUnlock, 'btn-pass-cancel': d.passCancel,
-            // 括号说明更新
             'ai-insight-note': d.aiNote
         };
         for (const [id, text] of Object.entries(map)) {
@@ -1120,7 +1108,6 @@
         }
         document.getElementById('alert-password-input').placeholder = d.passPlaceholder;
         
-        // 更新指纹提示语
         const sendHint = document.getElementById('send-hash-hint');
         if(sendHint) sendHint.innerText = d.hashHintSend || "";
         
@@ -1156,7 +1143,6 @@
             const toggle = modal.querySelector('.pwd-toggle');
             if(toggle) toggle.innerText = "🙈";
             
-            /* 清空并隐藏上次的指纹 */
             document.getElementById('recv-fingerprint').innerText = "";
             document.getElementById('recv-fingerprint').style.display = 'none';
             document.getElementById('recv-hash-hint').style.display = 'none';
@@ -1238,16 +1224,13 @@
 
     function showCryptoModal() { 
         if(isEncrypted) { isEncrypted = false; aesKey = ""; document.getElementById('crypto-password').value = ""; checkStrength(""); updateLockUI(); return; } 
-        
         const pwdInput = document.getElementById('crypto-password');
         pwdInput.type = "password";
         const toggle = document.querySelector('#crypto-modal .pwd-toggle');
         if(toggle) toggle.innerText = "🙈";
-        /* 清空并隐藏指纹 */
         document.getElementById('send-fingerprint').innerText = "";
         document.getElementById('send-fingerprint').style.display = 'none';
         document.getElementById('send-hash-hint').style.display = 'none';
-        
         document.getElementById('crypto-modal').style.display = 'flex'; 
     }
     function closeCryptoModal() { document.getElementById('crypto-modal').style.display = 'none'; }
@@ -1268,7 +1251,13 @@
     }
     function updateLockUI() { document.getElementById('protection-toggle-input').checked = isEncrypted; }
     
-    function handleFiles(files) { stagedFiles = stagedFiles.concat(Array.from(files)); renderStagedList(); }
+    // [Bug 修复核心] 添加文件后，重置 Input 的 value，允许重复选择同一文件
+    function handleFiles(files) { 
+        stagedFiles = stagedFiles.concat(Array.from(files)); 
+        renderStagedList();
+        // 这里的修复：清空文件选择器
+        document.getElementById('fileInput').value = ''; 
+    }
 
     function getFileIcon(name) {
         const ext = name.split('.').pop().toLowerCase();
@@ -1283,10 +1272,11 @@
 
     function renderStagedList() { 
         const list = document.getElementById('stagedList'); 
+        
         if (stagedFiles.length === 0) {
             list.style.display = 'none';
             document.getElementById('file-count-badge').style.display = 'none';
-            AIEngine.renderTags([]); 
+            AIEngine.renderTags({ tags: [], risk: false }); 
         } else {
             list.style.display = 'block';
             const badge = document.getElementById('file-count-badge');
@@ -1295,6 +1285,7 @@
             list.innerHTML = stagedFiles.map((f, i) => 
                 `<div class="staged-item"><span>${getFileIcon(f.name)} ${f.name.length > 15 ? f.name.substring(0,12)+'...' : f.name}</span><span style="color:var(--danger); cursor:pointer; font-weight:bold; padding:0 5px;" onclick="stagedFiles.splice(${i},1);renderStagedList()">✕</span></div>`
             ).join('');
+            
             const aiTags = AIEngine.analyze(stagedFiles);
             AIEngine.renderTags(aiTags);
         }
@@ -1335,17 +1326,15 @@
         if(peer) peer.destroy(); currentDownloads = 0; const code = Math.floor(100000 + Math.random() * 900000);
         peer = new Peer(PREFIX + code);
         
+        document.getElementById('ai-suggestions').style.display = 'none';
+
         peer.on('open', () => {
-            updateConnectionStatus(true); // Online
             const area = document.getElementById('senderCodeArea'); if (area) { area.style.display = 'block'; setTimeout(() => { area.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 200); }
             document.getElementById('myCode').innerText = code; document.getElementById('qrcode').innerHTML = ""; 
             new QRCode(document.getElementById('qrcode'), { text: window.location.origin + window.location.pathname + "?c=" + code, width: 140, height: 140 });
             startExpiryTimer();
         });
         
-        peer.on('error', () => { updateConnectionStatus(false); });
-        peer.on('disconnected', () => { updateConnectionStatus(false); });
-
         peer.on('connection', c => {
             c.on('data', d => { 
                 if (d.type === 'security_burn') { showCustomAlert("⚠️ SECURITY ALERT: Recipient failed authentication 3 times."); resetSender(); return; }
@@ -1388,7 +1377,6 @@
         downloadDotsIdx = setInterval(() => { dots = (dots + 1) % 4; btn.innerText = "Downloading" + ".".repeat(dots); }, 400);
 
         rPeer.on('open', () => {
-            updateConnectionStatus(true); // Online
             const conn = rPeer.connect(PREFIX + code, { reliable: true }); activeConn = conn;
             let meta = null, chunks = [], totalRecv = 0, startTime = Date.now(), lastUpdate = 0;
             
@@ -1510,9 +1498,6 @@
                 }
             });
         });
-        
-        rPeer.on('error', () => { updateConnectionStatus(false); });
-        rPeer.on('disconnected', () => { updateConnectionStatus(false); });
     }
 
     function addHistory(name, type) {
@@ -1564,7 +1549,7 @@
         if(expiryTimerIdx) clearInterval(expiryTimerIdx); 
         window.scrollTo({ top: 0, behavior: 'smooth' }); 
         setTimeout(() => window.scrollTo(0,0), 300);
-        updateConnectionStatus(false); // Reset to offline on stop
+        // [修改] 移除 resetSender 里的离线状态强制切换
     }
     
     function resetReceiver() { 
@@ -1582,7 +1567,7 @@
         const badge = document.getElementById('recv-text-count');
         if(badge) badge.style.display = 'none';
         activeConn = null; 
-        updateConnectionStatus(false); // Reset to offline
+        // [修改] 移除 resetReceiver 里的离线状态强制切换
     }
     function switchTab(m, e) { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.panel').forEach(p => p.classList.remove('active')); e.target.classList.add('active'); document.getElementById(`panel-${m}`).classList.add('active'); }
     
@@ -1592,7 +1577,7 @@
     function tickScanner() { const v = document.getElementById('video-preview'); if(v.readyState === v.HAVE_ENOUGH_DATA) { const cvs = document.createElement("canvas"); cvs.width = v.videoWidth; cvs.height = v.videoHeight; const ctx = cvs.getContext("2d"); ctx.drawImage(v, 0, 0); const data = jsQR(ctx.getImageData(0,0,cvs.width,cvs.height).data, cvs.width, cvs.height); if(data) { const c = new URL(data.data).searchParams.get("c"); if(c) { document.getElementById('targetCode').value = c; closeScanner(); triggerAd('receive'); return; } } } if(document.getElementById('scanner-modal').style.display === 'flex') requestAnimationFrame(tickScanner); }
     function initStars() { const c = document.getElementById('stars'); for(let i=0; i<80; i++) { const s = document.createElement('div'); s.className = 'star'; s.style.width = s.style.height = Math.random()*2+'px'; s.style.left = Math.random()*100+'%'; s.style.top = Math.random()*100+'%'; s.style.animationDuration = Math.random()*20+20+'s'; c.appendChild(s); } }
     
-    window.onload = () => { initStars(); applyI18N(); initDragAndDrop(); renderHistory(); detectAdBlock(); };
+    window.onload = () => { initStars(); applyI18N(); initDragAndDrop(); renderHistory(); detectAdBlock(); updateNetworkStatus(); };
 </script>
 </body>
 </html>
